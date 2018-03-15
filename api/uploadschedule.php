@@ -10,7 +10,7 @@ require_once  $_SERVER['DOCUMENT_ROOT'] . "/vendor/autoload.php";
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
 #JSON Response
-$jsonResponeArr = array();
+$jsonResponseArr = array();
 
 #Restricts to POST
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
 }
 
 #Reads Config file
-$config = parse_ini_file('blobstorageconfig.ini');
+$config = parse_ini_file("blobstorageconfig.ini", true);
 
-if (!$config) {
+if ($config === false) {
     onError('Error reading Blob Storage config file');
 }
 
@@ -37,9 +37,11 @@ $file = $_FILES['schedule']['tmp_name'];
 
 
 #Blob Storage Related
-$connectionStr = "DefaultEndpointsProtocol=https;AccountName={$accountName};AccountKey={$accountKey}";
+$connectionStr = "DefaultEndpointsProtocol=http;AccountName={$accountName};AccountKey={$accountKey}";
+echo $connectionStr;
 $blobClient = BlobRestProxy::createBlobService($connectionStr);
 $containerName = $config['container']['name'];
+
 
 #Uploading to blob storage
 $content = fopen($file, "r");
@@ -48,14 +50,17 @@ if (!$content) {
 }
 
 $blobClient->createBlockBlob($containerName, $fileName, $content);
+$jsonResponseArr['status'] = 'ok';
+$jsonResponseArr['statusCode'] = '200';
+printJSON();
 
 
 function onError($reason) {
-    global $jsonResponeArr;
+    global $jsonResponseArr;
 
-    $jsonResponeArr['status'] = 'error';
-    $jsonResponeArr['statusCode'] = '503';
-    $jsonResponeArr['reason'] = $reason;
+    $jsonResponseArr['status'] = 'error';
+    $jsonResponseArr['statusCode'] = '503';
+    $jsonResponseArr['reason'] = $reason;
 
     printJSON();
 }
