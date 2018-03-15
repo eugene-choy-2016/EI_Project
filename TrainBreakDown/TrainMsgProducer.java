@@ -1,7 +1,10 @@
+import java.util.*;
+import javax.jms.*;
+
 public class TrainMsgProducer{
 
-    public static const int QUEUE = 1;
-    public static const int TOPIC = 2;
+    public static final int QUEUE = 1;
+    public static final int TOPIC = 2;
 
     private  String          serverUrl;
     private  String          name;
@@ -13,8 +16,11 @@ public class TrainMsgProducer{
     private  Destination     destination;
 
     public TrainMsgProducer(String serverUrl,String name,int producerType){
+        this.serverUrl = serverUrl;
+        this.name = name;
+        this.producerType = producerType;
         try {
-            tibjmsUtilities.initSSLParams(serverUrl,[]);
+            tibjmsUtilities.initSSLParams(serverUrl,new String[0]);
         }
         catch (JMSSecurityException e)
         {
@@ -42,7 +48,7 @@ public class TrainMsgProducer{
             session = connection.createSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
 
             /* create the destination */
-            if(useTopic)
+            if(producerType == TrainMsgProducer.TOPIC)
                 destination = session.createTopic(name);
             else
                 destination = session.createQueue(name);
@@ -59,7 +65,7 @@ public class TrainMsgProducer{
 
             /* publish message */
             msgProducer.send(destination, msg);
-            
+            System.out.println("Message sent: " + msg);
 
             /* close the connection */
             connection.close();

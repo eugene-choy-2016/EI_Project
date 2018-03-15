@@ -4,13 +4,14 @@ import java.io.IOException;
 
 public class TrainManagementSystem{
     
-    String serverUrl = null;
+    public static String serverUrl;
     
     
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         boolean run = true;
-        severUrl = "localhost"; //if this is done locally 
+        serverUrl = "localhost"; //if this is done locally 
+        initializeMsgProducers();
         
         while(run){
             System.out.println();
@@ -32,8 +33,15 @@ public class TrainManagementSystem{
 
     }
     
-    public boolean routeInput(int input, Scanner sc){
-        `
+    //Working
+    public static boolean initializeMsgProducers(){
+        TrainMsgProducer tmsProducer = new TrainMsgProducer(serverUrl,"q.test",TrainMsgProducer.QUEUE);
+        //tmsProducer.sendMessage("testMsg");
+        return true;
+    }
+    
+    public static boolean routeInput(int input, Scanner sc){
+        
         if(input == 1){
             updateURL(sc);
             return true;
@@ -49,18 +57,19 @@ public class TrainManagementSystem{
             
             return false;
         }
+        return false;
     }
     
-    public void updateURL(Scanner sc){
+    public static void updateURL(Scanner sc){
         System.out.println(); 
-        System.out.println("Current serverURL: "&& serverUrl);
+        System.out.println("Current serverURL: " + serverUrl);
         System.out.print("New serverURL: ");
         
-        serverURL = sc.nextLine(); //Get the new serverURL and update it
+        serverUrl = sc.nextLine(); //Get the new serverURL and update it
         
     }
     
-    public void sendMessage(Scanner sc){
+    public static void sendMessage(Scanner sc){
         System.out.println();
         System.out.print("Indicate the destination you want to send to:");
         
