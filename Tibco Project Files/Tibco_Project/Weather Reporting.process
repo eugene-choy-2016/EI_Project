@@ -12,7 +12,7 @@
         <pd:y>67</pd:y>
         <config>
             <StartTime>1520430284000</StartTime>
-            <Frequency>false</Frequency>
+            <Frequency>true</Frequency>
             <TimeInterval>1</TimeInterval>
             <FrequencyIndex>Second</FrequencyIndex>
         </config>
@@ -32,11 +32,12 @@
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>GET</restMethodUI>
-            <restResponseType>JSON</restResponseType>
+            <restResponseType>XML</restResponseType>
             <authChoiceUI>No Authentication</authChoiceUI>
             <WADLPaths/>
             <WADLBaseURL/>
             <restMethodIDUI/>
+            <restURI>http://api.nea.gov.sg/api/WebAPI/?dataset=2hr_nowcast&amp;keyref=781CF461BB6606AD48001FDD2657FAF0D8CE9493DE977503</restURI>
             <restInputReferNode>
                 <xsd:element name="Parameters">
                     <xsd:complexType>
