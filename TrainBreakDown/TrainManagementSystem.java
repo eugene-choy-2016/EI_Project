@@ -50,7 +50,7 @@ public class TrainManagementSystem{
     
     //Working
     public static boolean initializeMsgProducers(){
-        breakdownMsger = new TrainMsgProducer(serverUrl,"q.breakdown",TrainMsgProducer.QUEUE);
+        breakdownMsger = new TrainMsgProducer(serverUrl,"q.breakdown","q.deployed",TrainMsgProducer.QUEUE);
         return true;
     }
     
@@ -101,7 +101,7 @@ public class TrainManagementSystem{
     }
     
     public static void processAllFiles(){
-        String address = "C:\\Users\\SLJ\\EI_Project\\TrainBreakDown\\msgResource";
+        String address = "C://EI//Project//breakdownReports";
         visitAllFiles(new File(address));
     }
     
@@ -166,7 +166,7 @@ public class TrainManagementSystem{
         }
         
         breakdownMsger.sendMessage(finalMessage.toString());
-        
+        MessageConsumer replyConsumer;
         
     }
     
