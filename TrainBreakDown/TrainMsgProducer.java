@@ -59,8 +59,8 @@ public class TrainMsgProducer {
 
             /* create the producer */
             msgProducer = session.createProducer(null);
-            msgConsumer = session.createConsumer(null);
-
+            msgConsumer = session.createConsumer(replyDestination);
+			connection.start();
             /* create text message */
             msg = session.createTextMessage();
 
