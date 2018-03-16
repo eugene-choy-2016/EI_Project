@@ -94,7 +94,7 @@ public class TrainManagementSystem{
     }
     
     public static void processAllFiles(){
-        String address = "C:\\Users\\i-am-\\OneDrive - Singapore Management University\\Year 2\\EI\\Project\\EI_Project\\TrainBreakDown\\msgResource";
+        String address = "C:\\Users\\SLJ\\EI_Project\\TrainBreakDown\\msgResource";
         visitAllFiles(new File(address));
     }
     
