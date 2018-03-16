@@ -11,6 +11,10 @@ Please use this names for the various JMS Messages
 Breakdown messages : q.breakdown
 ```
 
+```
+Async Reply after deployed: q.deployed
+```
+
 ## Features
 
 ### Send Message Feature
