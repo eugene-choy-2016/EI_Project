@@ -1,3 +1,13 @@
 .idea/
 composer.phar
 /vendor/
+web/nbproject/private/
+web/build/
+web/nbbuild/
+web/dist/
+web/nbdist/
+web/.nb-gradle/
+/web/getDepot/nbproject/private/
+/web/getDepot/build/
+/web/nearestDepot/nbproject/private/
+/web/nearestDepot/dist/
