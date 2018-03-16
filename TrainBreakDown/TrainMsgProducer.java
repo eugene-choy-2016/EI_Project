@@ -1,23 +1,29 @@
 import java.util.*;
 import javax.jms.*;
+import javax.print.attribute.standard.Destination;
 
 public class TrainMsgProducer{
 
     public static final int QUEUE = 1;
     public static final int TOPIC = 2;
 
-    private  String          serverUrl;
-    private  String          name;
-    private  int             producerType;
+    private     String          serverUrl;
+    private     String          name;
+    private     String          replyName;
+    private     int             producerType;
     
-    private  Connection      connection;
-    private  Session         session;
-    private  MessageProducer msgProducer;
-    private  Destination     destination;
+    private     Connection      connection;
+    private     Session         session;
+    private     MessageProducer msgProducer;
+    private     MessageConsumer msgConsumer;
 
-    public TrainMsgProducer(String serverUrl,String name,int producerType){
+    private     Destination     destination;
+    private     Destination     replyDestination;
+
+    public TrainMsgProducer(String serverUrl,String name,String replyName, int producerType){
         this.serverUrl = serverUrl;
         this.name = name;
+        this.replyName = replyName;
         this.producerType = producerType;
         try {
             tibjmsUtilities.initSSLParams(serverUrl,new String[0]);
@@ -48,25 +54,35 @@ public class TrainMsgProducer{
             session = connection.createSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
 
             /* create the destination */
-            if(producerType == TrainMsgProducer.TOPIC)
+            if(producerType == TrainMsgProducer.TOPIC){
                 destination = session.createTopic(name);
-            else
+                replyDestination = session.createTopic(replyName);
+            }else{
                 destination = session.createQueue(name);
+                replyDestination = session.createQueue(replyName);
+            }
 
             /* create the producer */
-            msgProducer = session.createProducer(null);
-
+            msgProducer = session.createProducer(destination);
+            msgConsumer = session.createConsumer(replyDestination);
 
             /* create text message */
             msg = session.createTextMessage();
 
             /* set message text */
             msg.setText((String)message);
+            msg.setJMSReplyTo(replyDestination);
 
             /* publish message */
             msgProducer.send(destination, msg);
-            System.out.println("Message sent: " + msg);
+            
+            //Wait for a reply regarding Bus Deployed
+            // Send a request and wait for a reply. Code also can be added to time-out the wait
+            Message reply = replyConsumer.receive();
 
+            // Process the reply.
+            printMsg(reply);
+            
             /* close the connection */
             connection.close();
         } 

@@ -23,7 +23,14 @@ public class TrainManagementSystem{
             System.out.println("====================================");
             System.out.println("       Train Management System      ");
             System.out.println("====================================");
-            
+
+            System.out.println();
+            System.out.println();
+
+            System.out.println("Server URL: " + serverUrl);
+
+
+
             System.out.println("1. Update Server URL");
             System.out.println("2. Send Message");
             System.out.println("3. Check Messages");
@@ -158,13 +165,13 @@ public class TrainManagementSystem{
             }
         }
         
-        breakdownMsger. sendMessage(finalMessage.toString());
+        breakdownMsger.sendMessage(finalMessage.toString());
         
         
     }
     
     public static void cls(){
-        for (int i = 0 ; i < 20; i ++){
+        for (int i = 0 ; i < 10; i ++){
             System.out.println();
         }
        
