@@ -26,10 +26,12 @@ public class TrainManagementSystem{
             
             System.out.println("1. Update Server URL");
             System.out.println("2. Send Message");
-            System.out.println("3. Check Incoming Message");
+            System.out.println("3. Check Messages");
             System.out.println("4. Quit Program");
-            
+            System.out.println();
             //cls();
+            
+            System.out.print("Option: ");
             int input = sc.nextInt();
             run = routeInput(input,sc);
             
@@ -49,33 +51,46 @@ public class TrainManagementSystem{
         
         if(input == 1){
             updateURL(sc);
+            cls();
             return true;
         }
         if(input == 2){
             messageScreen();
+            cls();
             return true;
         }
         if (input == 3){
+            cls();
             return true;
         }
         if(input == 4){
-            
+            cls();
             return false;
         }
+        cls();
         return false;
+        
     }
     
     public static void updateURL(Scanner sc){
         System.out.println(); 
         System.out.println("Current serverURL: " + serverUrl);
         System.out.print("New serverURL: ");
+        System.out.flush();
         
-        serverUrl = sc.nextLine(); //Get the new serverURL and update it
-        
+        serverUrl = sc.next(); //Get the new serverURL and update it
+        System.out.flush();
+         
+        //if you update reinitialize the message producers
+        initializeMsgProducers();
     }
     
     public static void messageScreen(){
-        processAllFiles();
+        processAllFiles(); //This process the XML files and send it 
+    }
+    
+    public static void inboxScreen(){
+        
     }
     
     public static void processAllFiles(){
@@ -143,13 +158,13 @@ public class TrainManagementSystem{
             }
         }
         
-        breakdownMsger.sendMessage(finalMessage.toString());
+        breakdownMsger. sendMessage(finalMessage.toString());
         
         
     }
     
     public static void cls(){
-        for (int i = 0 ; i < 50; i ++){
+        for (int i = 0 ; i < 20; i ++){
             System.out.println();
         }
        
