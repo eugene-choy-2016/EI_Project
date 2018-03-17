@@ -23,7 +23,14 @@ public class TrainManagementSystem{
             System.out.println("====================================");
             System.out.println("       Train Management System      ");
             System.out.println("====================================");
-            
+
+            System.out.println();
+            System.out.println();
+
+            System.out.println("Server URL: " + serverUrl);
+
+
+
             System.out.println("1. Update Server URL");
             System.out.println("2. Send Message");
             System.out.println("3. Check Messages");
@@ -43,7 +50,7 @@ public class TrainManagementSystem{
     
     //Working
     public static boolean initializeMsgProducers(){
-        breakdownMsger = new TrainMsgProducer(serverUrl,"q.breakdown",TrainMsgProducer.QUEUE);
+        breakdownMsger = new TrainMsgProducer(serverUrl,"q.breakdown","q.deployed",TrainMsgProducer.QUEUE);
         return true;
     }
     
@@ -94,7 +101,7 @@ public class TrainManagementSystem{
     }
     
     public static void processAllFiles(){
-        String address = "C:\\Users\\i-am-\\OneDrive - Singapore Management University\\Year 2\\EI\\Project\\EI_Project\\TrainBreakDown\\msgResource";
+        String address = "C://EI//Project//breakdownReports";
         visitAllFiles(new File(address));
     }
     
@@ -158,13 +165,13 @@ public class TrainManagementSystem{
             }
         }
         
-        breakdownMsger. sendMessage(finalMessage.toString());
-        
+        breakdownMsger.sendMessage(finalMessage.toString());
+        MessageConsumer replyConsumer;
         
     }
     
     public static void cls(){
-        for (int i = 0 ; i < 20; i ++){
+        for (int i = 0 ; i < 10; i ++){
             System.out.println();
         }
        

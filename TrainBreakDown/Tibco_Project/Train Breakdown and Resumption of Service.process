@@ -30,8 +30,8 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>997</pd:endX>
-    <pd:endY>284</pd:endY>
+    <pd:endX>1174</pd:endX>
+    <pd:endY>297</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1520427699772</pd:targetNamespace>
@@ -155,8 +155,8 @@
     <pd:activity name="Reply to TMS that Buses Deployed">
         <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
         <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
-        <pd:x>624</pd:x>
-        <pd:y>48</pd:y>
+        <pd:x>778</pd:x>
+        <pd:y>68</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -230,8 +230,8 @@
     <pd:activity name="Send Tweet to Followers">
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>608</pd:x>
-        <pd:y>230</pd:y>
+        <pd:x>785</pd:x>
+        <pd:y>243</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>GET</restMethodUI>
@@ -347,8 +347,8 @@
     <pd:activity name="Wait for Resumed service message">
         <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
-        <pd:x>731</pd:x>
-        <pd:y>223</pd:y>
+        <pd:x>908</pd:x>
+        <pd:y>236</pd:y>
         <config>
             <_eventTimeout>60000</_eventTimeout>
             <PermittedMessageType>Text</PermittedMessageType>
@@ -370,8 +370,8 @@
     <pd:activity name="Send Tweet to Followers about Resumption of Service">
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>734</pd:x>
-        <pd:y>64</pd:y>
+        <pd:x>911</pd:x>
+        <pd:y>77</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>GET</restMethodUI>
@@ -476,8 +476,8 @@
     <pd:activity name="Send Undeploy message to Bus Depot">
         <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
-        <pd:x>874</pd:x>
-        <pd:y>50</pd:y>
+        <pd:x>1051</pd:x>
+        <pd:y>63</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -496,8 +496,8 @@
     <pd:activity name="Log Incident in CSV">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>998</pd:x>
-        <pd:y>44</pd:y>
+        <pd:x>1175</pd:x>
+        <pd:y>57</pd:y>
         <config>
             <encoding>text</encoding>
             <compressFile>None</compressFile>
@@ -507,8 +507,8 @@
     <pd:activity name="Get Bus Depot Address">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>388</pd:x>
-        <pd:y>125</pd:y>
+        <pd:x>336</pd:x>
+        <pd:y>60</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -522,8 +522,8 @@
     <pd:activity name="Parse JSON">
         <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
         <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
-        <pd:x>451</pd:x>
-        <pd:y>203</pd:y>
+        <pd:x>381</pd:x>
+        <pd:y>189</pd:y>
         <config>
             <SchemaType>xsdType</SchemaType>
             <BadgerfishCheck>false</BadgerfishCheck>
@@ -533,8 +533,8 @@
     <pd:activity name="Email COO">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>995</pd:x>
-        <pd:y>148</pd:y>
+        <pd:x>1172</pd:x>
+        <pd:y>161</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
@@ -550,6 +550,49 @@
         </config>
         <pd:inputBindings/>
     </pd:activity>
+    <pd:activity name="Send to Bus Depot (Dyanmic)">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>479</pd:x>
+        <pd:y>228</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Wait for reply from Depot">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
+        <pd:x>617</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>-1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns:input/>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Receive Train Breakdown</pd:from>
         <pd:to>Parse XML</pd:to>
@@ -560,13 +603,6 @@
     <pd:transition>
         <pd:from>Reply to TMS that Buses Deployed</pd:from>
         <pd:to>Send Tweet to Followers</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Render-XML-1</pd:from>
-        <pd:to>Reply to TMS that Buses Deployed</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -645,6 +681,27 @@
     <pd:transition>
         <pd:from>Get Nearest Bus Depot</pd:from>
         <pd:to>Parse JSON</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render-XML-1</pd:from>
+        <pd:to>Send to Bus Depot (Dyanmic)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send to Bus Depot (Dyanmic)</pd:from>
+        <pd:to>Wait for reply from Depot</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for reply from Depot</pd:from>
+        <pd:to>Reply to TMS that Buses Deployed</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
