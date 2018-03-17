@@ -38,7 +38,6 @@ $file = $_FILES['schedule']['tmp_name'];
 
 #Blob Storage Related
 $connectionStr = "DefaultEndpointsProtocol=http;AccountName={$accountName};AccountKey={$accountKey}";
-echo $connectionStr;
 $blobClient = BlobRestProxy::createBlobService($connectionStr);
 $containerName = $config['container']['name'];
 
@@ -52,6 +51,7 @@ if (!$content) {
 $blobClient->createBlockBlob($containerName, $fileName, $content);
 $jsonResponseArr['status'] = 'ok';
 $jsonResponseArr['statusCode'] = '200';
+$jsonResponseArr['link'] = "https://eieio.blob.core.windows.net/{$containerName}/{$fileName}";
 printJSON();
 
 
