@@ -1,0 +1,1 @@
+This API requires Composer to be installed in server-side for it to work.
