@@ -51,7 +51,7 @@ if (!$content) {
 $blobClient->createBlockBlob($containerName, $fileName, $content);
 $jsonResponseArr['status'] = 'ok';
 $jsonResponseArr['statusCode'] = '200';
-$jsonResponseArr['link'] = "https:\/\/eieio.blob.core.windows.net\/{$containerName}\/{$fileName}";
+$jsonResponseArr['link'] = "https://eieio.blob.core.windows.net/{$containerName}/{$fileName}";
 printJSON();
 
 
