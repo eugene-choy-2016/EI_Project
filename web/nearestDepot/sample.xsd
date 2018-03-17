@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid Studio 2017 - Developer Bundle Edition (Education) 15.1.17.7979 (https://www.liquid-technologies.com) -->
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="breakdown">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="train_id" />
+        <xs:element minOccurs="0" name="faultType" />
+        <xs:element minOccurs="0" name="timestamp" />
+        <xs:element minOccurs="1" name="coordinates" type="xs:string" />
+        <xs:element minOccurs="0" name="remark" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
