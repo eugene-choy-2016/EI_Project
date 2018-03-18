@@ -6,7 +6,8 @@ import java.lang.*;
 public class TrainManagementSystem{
     
     public static String serverUrl;
-    public static TrainMsgProducer breakdownMsger;
+    public static TrainMsgAsyncProducer breakdownMsger;
+    public static TrainMsgProducer resumeServiceMsger;
     
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
@@ -30,10 +31,9 @@ public class TrainManagementSystem{
             System.out.println("Server URL: " + serverUrl);
 
 
-
             System.out.println("1. Update Server URL");
-            System.out.println("2. Send Message");
-            System.out.println("3. Check Messages");
+            System.out.println("2. Send Breakdown Message");
+            System.out.println("3. Send System Resumed Message");
             System.out.println("4. Quit Program");
             System.out.println();
             //cls();
@@ -50,10 +50,12 @@ public class TrainManagementSystem{
     
     //Working
     public static boolean initializeMsgProducers(){
-        breakdownMsger = new TrainMsgProducer(serverUrl,"q.breakdown","q.deployed",TrainMsgProducer.QUEUE);
+        breakdownMsger = new TrainMsgAsyncProducer(serverUrl,"q.breakdown","q.deployed",TrainMsgProducer.QUEUE);
+        resumeServiceMsger = new TrainMsgProducer(serverUrl,"q.resumed",TrainMsgProducer.QUEUE);
         return true;
     }
     
+    //Route the input from main
     public static boolean routeInput(int input, Scanner sc){
         
         if(input == 1){
@@ -67,13 +69,11 @@ public class TrainManagementSystem{
             return true;
         }
         if (input == 3){
+            systemResumedScreen();
             cls();
             return true;
         }
-        if(input == 4){
-            cls();
-            return false;
-        }
+
         cls();
         return false;
         
@@ -96,9 +96,12 @@ public class TrainManagementSystem{
         processAllFiles(); //This process the XML files and send it 
     }
     
-    public static void inboxScreen(){
-        
+    public static void systemResumedScreen(){
+        System.out.println("Informing q.resumed that systems has resumed");
+        resumeServiceMsger.sendMessage("SYSTEM RESUMED");
+        System.out.println("MESSAGE SENT");
     }
+    
     
     public static void processAllFiles(){
         String address = "C://EI//Project//breakdownReports";
@@ -151,7 +154,7 @@ public class TrainManagementSystem{
         }
   }
     
-    public static void sendMessage(Vector data){
+    private static void sendMessage(Vector data){
         
         StringBuffer finalMessage = new StringBuffer();
         int i;
