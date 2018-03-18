@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.*;
+import net.minidev.json.JSONObject;
 import org.w3c.dom.Document;
 import util.ConnectionManager;
 import util.verifyAgainstXSD;
@@ -53,7 +54,7 @@ public class MainServlet extends HttpServlet {
         
         InputStream xml = null;
         InputStream xsd = new FileInputStream(new File(workDir+"sample.xsd"));
-        
+        JSONObject json = new JSONObject();
         response.setContentType("application/json");
         try (PrintWriter out = response.getWriter()) {
             Enumeration<String> e = request.getParameterNames();
@@ -65,7 +66,7 @@ public class MainServlet extends HttpServlet {
                 System.out.println(s + ": " +" : "+(request.getParameter(s) instanceof String) + request.getParameter(s));
             }
             
-           if(verifyAgainstXSD.verify(xml, xsd)){
+            if(verifyAgainstXSD.verify(xml, xsd)){
                 System.out.println("VERIFIED");
                 xml.close();
                 xsd.close();
@@ -99,21 +100,26 @@ public class MainServlet extends HttpServlet {
                         ID = idMap.get(d);
                     }
                 }
+                
+                json.put("message", ID);
+                json.put("status","success");
+                json.put("error","");
+                out.write(json.toJSONString());
                 System.out.println(minDist + " : " + ID);
-                
-                
-
-           }
-           else{
+            }
+            else{
                //todo: SETTLE ERROR HANDLING
-               System.out.println("NOT VERIFIED");
-           }
+                json.put("message", "");
+                json.put("status","fail");
+                json.put("error","XML schema validation failure");
+                out.write(json.toJSONString());
+                System.out.println("NOT VERIFIED");
+               
+            }
             
             
             
         }catch(Exception e){
-        }finally{
-
         }
     }
     

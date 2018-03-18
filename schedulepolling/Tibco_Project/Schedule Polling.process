@@ -9,7 +9,7 @@
         <pd:type>com.tibco.plugin.file.FileEventSource</pd:type>
         <pd:resourceType>ae.activities.FileEventSourceResource</pd:resourceType>
         <pd:x>108</pd:x>
-        <pd:y>99</pd:y>
+        <pd:y>98</pd:y>
         <config>
             <pollInterval>5</pollInterval>
             <createEvent>true</createEvent>
@@ -19,22 +19,22 @@
             <encoding>text</encoding>
             <sortby>File Name</sortby>
             <sortorder>descending</sortorder>
-            <fileName>C:\Users\Ho Wei Hong\Documents\Git\EI_Project_Original\SchedulePolling\schedule\*.txt</fileName>
+            <fileName>C:\Users\Ho Wei Hong\Documents\Git\EI_Project_Original\schedulepolling\schedule\*.txt</fileName>
             <includeCurrent>true</includeCurrent>
         </config>
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>696</pd:endX>
-    <pd:endY>99</pd:endY>
+    <pd:endX>717</pd:endX>
+    <pd:endY>103</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1521286907602</pd:targetNamespace>
-    <pd:activity name="Upload and Send Schedule">
+    <pd:activity name="Upload Schedule">
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>260</pd:x>
-        <pd:y>108</pd:y>
+        <pd:x>259</pd:x>
+        <pd:y>100</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>POST</restMethodUI>
@@ -43,7 +43,7 @@
             <WADLPaths/>
             <WADLBaseURL/>
             <restMethodIDUI/>
-            <restURI>https://eieio.azurewebsites.net/api/uploadschedule</restURI>
+            <restURI>https://eieio.azurewebsites.net/schedulepolling/uploadschedule</restURI>
             <trustAllHostUI>true</trustAllHostUI>
             <restInputReferNode>
                 <xsd:element name="Parameters">
@@ -181,24 +181,24 @@
         <pd:inputBindings>
             <ns1:ActivityInputClass>
                 <jsonString>
-                    <xsl:value-of select="$Upload-and-Send-Schedule/ns1:RESTOutput/msg"/>
+                    <xsl:value-of select="$Upload-Schedule/ns1:RESTOutput/msg"/>
                 </jsonString>
             </ns1:ActivityInputClass>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Send Mail">
+    <pd:activity name="Send Emails to Depot">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>555</pd:x>
-        <pd:y>97</pd:y>
+        <pd:x>563</pd:x>
+        <pd:y>110</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
-            <host/>
-            <useSsl>false</useSsl>
-            <authenticate>false</authenticate>
-            <username/>
-            <password/>
+            <host>smtp.gmail.com:587</host>
+            <useSsl>true</useSsl>
+            <authenticate>true</authenticate>
+            <username>depot.schedule@gmail.com</username>
+            <password>Qwerty12345!</password>
             <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
                 <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
                 <ns0:cert isRef="true">/certs</ns0:cert>
@@ -217,13 +217,16 @@
         <pd:inputBindings>
             <ns2:mailActivityInput>
                 <username>
-                    <xsl:value-of select=""/>
+                    <xsl:value-of select="&quot;depot.schedule@gmail.com&quot;"/>
                 </username>
                 <password>
-                    <xsl:value-of select=""/>
+                    <xsl:value-of select="&quot;Qwerty12345!&quot;"/>
                 </password>
+                <from>
+                    <xsl:value-of select="&quot;depot.schedule@gmail.com&quot;"/>
+                </from>
                 <to>
-                    <xsl:value-of select="&quot;depot.jurong@gmail.com&quot;"/>
+                    <xsl:value-of select="&quot;depot.jurong@gmail.com, depot.tampines@gmail.com&quot;"/>
                 </to>
                 <xsl:if test="&quot;Schedule&quot;">
                     <subject>
@@ -232,7 +235,7 @@
                 </xsl:if>
                 <pfx:bodyElement>
                     <bodyText>
-                        <xsl:value-of select="$Parse-JSON/ns1:ActivityOutputClass/root/link"/>
+                        <xsl:value-of select="concat(&quot;A new schedule is available. Download here: &quot;, $Parse-JSON/ns1:ActivityOutputClass/root/link)"/>
                     </bodyText>
                 </pfx:bodyElement>
             </ns2:mailActivityInput>
@@ -240,13 +243,13 @@
     </pd:activity>
     <pd:transition>
         <pd:from>Schedule Poller</pd:from>
-        <pd:to>Upload and Send Schedule</pd:to>
+        <pd:to>Upload Schedule</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Upload and Send Schedule</pd:from>
+        <pd:from>Upload Schedule</pd:from>
         <pd:to>Parse JSON</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -254,13 +257,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Parse JSON</pd:from>
-        <pd:to>Send Mail</pd:to>
+        <pd:to>Send Emails to Depot</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Send Mail</pd:from>
+        <pd:from>Send Emails to Depot</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
