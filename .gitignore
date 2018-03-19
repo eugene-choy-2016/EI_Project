@@ -13,3 +13,8 @@ web/.nb-gradle/
 /web/nearestDepot/dist/
 .DS_Store
 .folder
+
+# C-Sharp exclusives
+BusDepot/*.exe
+BusDepot/BusDepot/bin
+BusDepot/BusDepot/obj
