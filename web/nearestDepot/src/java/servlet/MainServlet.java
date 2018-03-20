@@ -103,7 +103,6 @@ public class MainServlet extends HttpServlet {
                 
                 json.put("message", ID);
                 json.put("status","success");
-                json.put("error","");
                 out.write(json.toJSONString());
                 System.out.println(minDist + " : " + ID);
             }
