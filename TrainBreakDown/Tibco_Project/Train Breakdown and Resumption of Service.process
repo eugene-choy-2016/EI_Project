@@ -333,11 +333,11 @@
         </config>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="Render-XML-1">
+    <pd:activity name="Render XML to sent to Depot">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
         <pd:x>492</pd:x>
-        <pd:y>41</pd:y>
+        <pd:y>42</pd:y>
         <config>
             <renderAsText>text</renderAsText>
             <validateInput>false</validateInput>
@@ -505,22 +505,6 @@
         </config>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="Get Bus Depot Address">
-        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
-        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>336</pd:x>
-        <pd:y>60</pd:y>
-        <config>
-            <timeout>10</timeout>
-            <commit>false</commit>
-            <maxRows>100</maxRows>
-            <emptyStrAsNil>false</emptyStrAsNil>
-            <statement>select * from where queue=''</statement>
-        </config>
-        <pd:inputBindings>
-            <jdbcQueryActivityInput/>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="Parse JSON">
         <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
         <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
@@ -563,7 +547,7 @@
         <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
         <pd:x>547</pd:x>
-        <pd:y>170</pd:y>
+        <pd:y>169</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -600,6 +584,21 @@
         </config>
         <pd:inputBindings>
             <ns:input/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JDBC Query">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>355</pd:x>
+        <pd:y>44</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -646,13 +645,6 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Parse JSON</pd:from>
-        <pd:to>Get Bus Depot Address</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>Log Incident in CSV</pd:from>
         <pd:to>Email COO</pd:to>
         <pd:lineType>Default</pd:lineType>
@@ -674,13 +666,6 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Get Bus Depot Address</pd:from>
-        <pd:to>Render-XML-1</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>Email COO</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
@@ -695,7 +680,7 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Render-XML-1</pd:from>
+        <pd:from>Render XML to sent to Depot</pd:from>
         <pd:to>Send to Bus Depot (Dyanmic)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -711,6 +696,20 @@
     <pd:transition>
         <pd:from>Wait for reply from Depot</pd:from>
         <pd:to>Reply to TMS that Buses Deployed</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse JSON</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>Render XML to sent to Depot</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

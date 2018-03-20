@@ -1,0 +1,10 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<busRequest xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="busRequest.xsd">
+	<station>Tanah Merah Station</station>
+	<reason>Train Fault</reason>
+	<timestamp>2017-03-18T16:20:10+08:00</timestamp>
+	<coords>
+		<lat>1.3272383</lat>
+		<long>103.9443528</long>
+	</coords>
+</busRequest>
