@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.tibco.com/body">
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://xmlns.tibco.com/body">
     <pd:name>Schedule Polling.process</pd:name>
     <pd:startName>Schedule Poller</pd:startName>
     <pd:startX>0</pd:startX>
@@ -19,7 +19,7 @@
             <encoding>text</encoding>
             <sortby>File Name</sortby>
             <sortorder>descending</sortorder>
-            <fileName>C:\Users\Ho Wei Hong\Documents\Git\EI_Project_Original\schedulepolling\schedule\*.txt</fileName>
+            <fileName>C:\EI\Project\schedules\*.txt</fileName>
             <includeCurrent>true</includeCurrent>
         </config>
         <pd:inputBindings/>
