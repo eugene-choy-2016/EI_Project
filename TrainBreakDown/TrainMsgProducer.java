@@ -34,7 +34,7 @@ public class TrainMsgProducer {
             TextMessage msg;
             int i;
 
-            System.err.println("Publishing to destination '" + name + "'\n");
+            //System.err.println("Publishing to destination '" + name + "'\n");
 
             ConnectionFactory factory = new com.tibco.tibjms.TibjmsConnectionFactory(serverUrl);
 
