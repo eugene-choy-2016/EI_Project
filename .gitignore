@@ -15,7 +15,7 @@ web/.nb-gradle/
 .folder
 
 # C-Sharp exclusives
-BusDepot/BusDepot/*.exe
 BusDepot/*.exe
+BusDepot/BusDepot/*.exe
 BusDepot/BusDepot/bin
 BusDepot/BusDepot/obj

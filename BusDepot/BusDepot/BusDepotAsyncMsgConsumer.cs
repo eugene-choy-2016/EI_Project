@@ -26,6 +26,7 @@
 /// </summary>
 
 using System;
+// using System.Xml;
 using TIBCO.EMS;
 
 public class BusDepotAsyncMsgConsumer : IExceptionListener, IMessageListener 
@@ -185,7 +186,10 @@ public class BusDepotAsyncMsgConsumer : IExceptionListener, IMessageListener
     public void OnMessage(Message msg)  {
         try 
         {
-            Console.WriteLine("Received message: " + msg);
+			TextMessage textMsg = (TextMessage)msg;
+            Console.WriteLine("Received message: " + textMsg.Text);
+			// XmlDocument doc = new XmlDocument();
+			// doc.LoadXml(textMsg.Text);
         } 
         catch (Exception e) 
         {
