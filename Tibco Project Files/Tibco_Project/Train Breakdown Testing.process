@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd" schemaLocation="/Schemas/new_breakdown.xsd"/>
@@ -33,7 +33,7 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>988</pd:endX>
+    <pd:endX>1168</pd:endX>
     <pd:endY>95</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -41,8 +41,8 @@
     <pd:activity name="Parse XML">
         <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
         <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
-        <pd:x>100</pd:x>
-        <pd:y>182</pd:y>
+        <pd:x>101</pd:x>
+        <pd:y>300</pd:y>
         <config>
             <inputStyle>text</inputStyle>
             <xsdVersion>default</xsdVersion>
@@ -58,8 +58,8 @@
     <pd:activity name="Render XML">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>203</pd:x>
-        <pd:y>183</pd:y>
+        <pd:x>258</pd:x>
+        <pd:y>445</pd:y>
         <config>
             <renderAsText>text</renderAsText>
             <validateInput>false</validateInput>
@@ -88,8 +88,8 @@
     <pd:activity name="Invoke REST API">
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>206</pd:x>
-        <pd:y>83</pd:y>
+        <pd:x>489</pd:x>
+        <pd:y>446</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>POST</restMethodUI>
@@ -205,8 +205,8 @@
     <pd:activity name="Parse JSON">
         <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
         <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
-        <pd:x>318</pd:x>
-        <pd:y>86</pd:y>
+        <pd:x>599</pd:x>
+        <pd:y>309</pd:y>
         <config>
             <SchemaType>xsdType</SchemaType>
             <BadgerfishCheck>false</BadgerfishCheck>
@@ -228,11 +228,11 @@
             </ns:ActivityInputClass>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="JDBC Query">
+    <pd:activity name="Get Bus Depot Address">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>439</pd:x>
-        <pd:y>88</pd:y>
+        <pd:x>427</pd:x>
+        <pd:y>55</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -261,17 +261,138 @@
             </jdbcQueryActivityInput>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Parse-XML-1">
-        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
-        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
-        <pd:x>550</pd:x>
-        <pd:y>95</pd:y>
+    <pd:activity name="Render Bus Request XML">
+        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+        <pd:x>696</pd:x>
+        <pd:y>51</pd:y>
         <config>
-            <inputStyle>binary</inputStyle>
-            <xsdVersion>default</xsdVersion>
-            <validateOutput>true</validateOutput>
+            <renderAsText>text</renderAsText>
+            <validateInput>false</validateInput>
+            <term ref="pfx3:busRequest"/>
         </config>
-        <pd:inputBindings/>
+        <pd:inputBindings>
+            <busRequest>
+                <station>
+                    <xsl:value-of select="$Parse-XML/breakdown/remark"/>
+                </station>
+                <reason>
+                    <xsl:value-of select="$Parse-XML/breakdown/faultType"/>
+                </reason>
+                <timestamp>
+                    <xsl:value-of select="$Parse-XML/breakdown/timestamp"/>
+                </timestamp>
+                <coords>
+                    <lat>
+                        <xsl:value-of select="$Parse-XML/breakdown/coordinates/lat"/>
+                    </lat>
+                    <long>
+                        <xsl:value-of select="$Parse-XML/breakdown/coordinates/long"/>
+                    </long>
+                </coords>
+            </busRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Deploy Request to Bus Depot">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>924</pd:x>
+        <pd:y>90</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <xsl:if test="$Get-Bus-Depot-Address/resultSet/Record[1]/queue">
+                    <destinationQueue>
+                        <xsl:value-of select="$Get-Bus-Depot-Address/resultSet/Record[1]/queue"/>
+                    </destinationQueue>
+                </xsl:if>
+                <Body>
+                    <xsl:value-of select="$Render-Bus-Request-XML/xmlString"/>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Reply to JMS Message">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>1038</pd:x>
+        <pd:y>220</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>JMS Queue Receiver</EventSource>
+            </ConfigurableHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <Body>
+                    <xsl:value-of select="&quot;Buses Deployed&quot;"/>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="TwitterPublish Activity">
+        <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
+        <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
+        <pd:x>1080</pd:x>
+        <pd:y>420</pd:y>
+        <config>
+            <PublishType>Tweet</PublishType>
+            <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
+        </config>
+        <pd:inputBindings>
+            <PublishTweetInput>
+                <status>
+                    <xsl:value-of select="concat(current-dateTime(),&quot;: &quot;,$Parse-XML/breakdown/faultType, &quot; at &quot;,  $Parse-XML/breakdown/remark, &quot; . Bus services have been deployed to the affected stations.&quot;)"/>
+                </status>
+            </PublishTweetInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wait for JMS Queue Message">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
+        <pd:x>815</pd:x>
+        <pd:y>426</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>-1</maxSessions>
+                <destination>q.resumed</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns2:input/>
+        </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>JMS Queue Receiver</pd:from>
@@ -303,7 +424,50 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Parse JSON</pd:from>
-        <pd:to>JDBC Query</pd:to>
+        <pd:to>Get Bus Depot Address</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Bus Depot Address</pd:from>
+        <pd:to>Render Bus Request XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render Bus Request XML</pd:from>
+        <pd:to>Send Deploy Request to Bus Depot</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Deploy Request to Bus Depot</pd:from>
+        <pd:to>Reply to JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to JMS Message</pd:from>
+        <pd:to>TwitterPublish Activity</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>TwitterPublish Activity</pd:from>
+        <pd:to>Wait for JMS Queue Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for JMS Queue Message</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

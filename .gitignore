@@ -19,3 +19,4 @@ BusDepot/*.exe
 BusDepot/BusDepot/*.exe
 BusDepot/BusDepot/bin
 BusDepot/BusDepot/obj
+/nbproject/private/

@@ -50,7 +50,7 @@ public class MainServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        final String workDir = "C:\\Users\\SLJ\\EI_Project\\web\\nearestDepot\\";
+        final String workDir = "C:\\EI\\busDepot\\";
         
         InputStream xml = null;
         InputStream xsd = new FileInputStream(new File(workDir+"sample.xsd"));
