@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd" schemaLocation="/Schemas/new_breakdown.xsd"/>
@@ -32,8 +32,8 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>719</pd:endX>
-    <pd:endY>161</pd:endY>
+    <pd:endX>941</pd:endX>
+    <pd:endY>157</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1521192190846</pd:targetNamespace>
@@ -97,7 +97,7 @@
             <WADLPaths/>
             <WADLBaseURL/>
             <restMethodIDUI/>
-            <restURI>http://bc6459fe.ngrok.io/nearestDepot/</restURI>
+            <restURI>http://localhost:8084/nearestDepot/</restURI>
             <restInputReferNode>
                 <xsd:element name="Parameters">
                     <xsd:complexType>
@@ -201,6 +201,30 @@
             </ns:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Parse JSON">
+        <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
+        <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
+        <pd:x>664</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <SchemaType>xsdType</SchemaType>
+            <BadgerfishCheck>false</BadgerfishCheck>
+            <ActivityOutputEditor>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence/>
+                    </xsd:complexType>
+                </xsd:element>
+            </ActivityOutputEditor>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInputClass>
+                <jsonString>
+                    <xsl:value-of select="$Invoke-REST-API/ns:RESTOutput/msg"/>
+                </jsonString>
+            </ns:ActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>JMS Queue Receiver</pd:from>
         <pd:to>Parse XML</pd:to>
@@ -224,6 +248,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Invoke REST API</pd:from>
+        <pd:to>Parse JSON</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse JSON</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

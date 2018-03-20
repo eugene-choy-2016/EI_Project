@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd"/>
     <pd:name>Train Breakdown and Resumption of Service.process</pd:name>
@@ -48,7 +48,7 @@
             <WADLPaths/>
             <WADLBaseURL/>
             <restMethodIDUI/>
-            <restURI>http://bc6459fe.ngrok.io/nearestDepot/</restURI>
+            <restURI>http://localhost.com/nearestDepot/</restURI>
             <restInputReferNode>
                 <xsd:element name="Parameters">
                     <xsd:complexType>
@@ -339,8 +339,9 @@
         <pd:x>492</pd:x>
         <pd:y>41</pd:y>
         <config>
-            <renderAsText>binary</renderAsText>
+            <renderAsText>text</renderAsText>
             <validateInput>false</validateInput>
+            <term/>
         </config>
         <pd:inputBindings/>
     </pd:activity>
@@ -348,7 +349,7 @@
         <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
         <pd:x>908</pd:x>
-        <pd:y>236</pd:y>
+        <pd:y>237</pd:y>
         <config>
             <_eventTimeout>60000</_eventTimeout>
             <PermittedMessageType>Text</PermittedMessageType>
@@ -514,6 +515,7 @@
             <commit>false</commit>
             <maxRows>100</maxRows>
             <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>select * from where queue=''</statement>
         </config>
         <pd:inputBindings>
             <jdbcQueryActivityInput/>
@@ -527,8 +529,15 @@
         <config>
             <SchemaType>xsdType</SchemaType>
             <BadgerfishCheck>false</BadgerfishCheck>
+            <ActivityOutputEditor ref=""/>
         </config>
-        <pd:inputBindings/>
+        <pd:inputBindings>
+            <ns2:ActivityInputClass>
+                <jsonString>
+                    <xsl:value-of select="$Get-Nearest-Bus-Depot/ns2:RESTOutput/msg"/>
+                </jsonString>
+            </ns2:ActivityInputClass>
+        </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Email COO">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
@@ -553,8 +562,8 @@
     <pd:activity name="Send to Bus Depot (Dyanmic)">
         <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
-        <pd:x>479</pd:x>
-        <pd:y>228</pd:y>
+        <pd:x>547</pd:x>
+        <pd:y>170</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -573,8 +582,8 @@
     <pd:activity name="Wait for reply from Depot">
         <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
-        <pd:x>617</pd:x>
-        <pd:y>130</pd:y>
+        <pd:x>654</pd:x>
+        <pd:y>67</pd:y>
         <config>
             <_eventTimeout>60000</_eventTimeout>
             <PermittedMessageType>Text</PermittedMessageType>
