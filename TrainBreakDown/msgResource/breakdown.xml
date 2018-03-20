@@ -1,6 +1,7 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <breakdown xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation = "..\\new_breakdown.xsd">
 	<train_id>3</train_id>
+    <line>ew</line>
 	<faultType>Train Fault</faultType>
 	<timestamp>2018-02-20T09:00:00</timestamp>
 	<coordinates>
