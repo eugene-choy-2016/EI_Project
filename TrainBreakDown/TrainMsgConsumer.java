@@ -42,7 +42,7 @@
 import java.io.IOException;
 import javax.jms.*;
 
-public class tibjmsAsyncMsgConsumer
+public class TrainMsgConsumer
        implements ExceptionListener, MessageListener
 {
     public static final int QUEUE = 1;
@@ -62,13 +62,12 @@ public class tibjmsAsyncMsgConsumer
     /*-----------------------------------------------------------------------
      * Variables
      *----------------------------------------------------------------------*/
-    Connection      connection;
-    Session         session;
-    MessageConsumer msgConsumer;
-    Destination     destination;
+    private Connection      connection;
+    private Session         session;
+    private MessageConsumer msgConsumer;
+    private Destination     destination;
 
-
-    public tibjmsAsyncMsgConsumer(String serverUrl,String name,int messageType)
+    public TrainMsgConsumer(String serverUrl,String name,int messageType)
     {
         userName = "";
         password = "";
@@ -79,7 +78,7 @@ public class tibjmsAsyncMsgConsumer
 
         try
         {
-            tibjmsUtilities.initSSLParams(serverUrl,args);
+            tibjmsUtilities.initSSLParams(serverUrl,new String[0]);
         }
         catch(JMSSecurityException e)
         {
@@ -104,7 +103,7 @@ public class tibjmsAsyncMsgConsumer
             connection.setExceptionListener(this);
 
             /* create the destination */
-            if(messageType == TrainAsyncMsgConsumer.TOPIC)
+            if(messageType == TrainMsgConsumer.TOPIC)
                 destination = session.createTopic(name);
             else
                 destination = session.createQueue(name);
@@ -148,7 +147,12 @@ public class tibjmsAsyncMsgConsumer
     {
         try
         {
-            System.err.println("Received message: " + msg);
+            TextMessage receivedMsg = (TextMessage) msg;
+            System.out.println();
+            System.err.println("=======================NEW MESSAGE=========================");
+            System.err.println("Received message from : " + receivedMsg.getJMSDestination());
+            System.err.println("Message: " + receivedMsg.getText());
+            System.out.println();
         }
         catch(Exception e)
         {
