@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>Twitter OAUth 1.0 Resource</name>
+    <resourceType>twitter.sharedresource.TwitterOAuthSharedResource</resourceType>
+    <description>Twitter Auth</description>
+    <config>
+        <consumerKey>#!3guYQp+I1WG2PNXP7cjvRCUtSbREh23cLVsKBX/RaJQv+ovlMXAh2dS8+xMzgKisO9Imp844QjLOlJUIu3BAog==</consumerKey>
+        <consumerSecret>#!mncdD11iVvNcyPQ5QIM6qTOXBSUelJKt5d13EvTCL+i3MyEkKUXVH0XqwEUxIxH17WRwhfl5CtNG7An/K8hoiF+PrMTenqEJ16Jwm+rGTA0AxVr3LU0oglfJ0suMqGOAsVGcBlFBXM2iKhaAN36c7g==</consumerSecret>
+        <accessToken>#!8gN6q7PYB0PClNGg9Ts6EHGrPE1tilwy/Xw5j0F+KxmtNKI9YFz/hJTwe65gRhPa9OFxV9xsWukp7+8lBJXoFuwWWFfXNH9mPqeH/Bir0WDFVRwlgcOoWPHSGBeEvelNaXd/SfXdkEreE+dIt+sIlQ==</accessToken>
+        <accessTokenSecret>#!hfifido5iFTWAj1vsJEc7JbnEEQ7tk5V6Glb0KbWdGoTpbFlMwBb6DJ8KyhRZxmTmRXU+xil5tjGfQP9U3lGSMOeETwBfMLlNos58Ig8p5S+ppH60qQa+QJ1XqB/Q5+aUCHt501AsrI=</accessTokenSecret>
+    </config>
+</BWSharedResource>

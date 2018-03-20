@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coordinates xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///C:/Users/yk/Desktop/EI%20SHIT/EI_Project/web/nearestDepot/schema.xsd">
+    <longitude>
+        1
+    </longitude>
+    <latitude type="xs:decimal">
+        1
+    </latitude>
+</coordinates>

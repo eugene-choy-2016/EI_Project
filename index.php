@@ -5,7 +5,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
         }
 
         #hero {
@@ -16,7 +16,7 @@
         #subhero-1 {
             background: url("web/hero.jpg"), #000;
             background-position: 20% 100%;
-            background-size: 150%;
+            background-size: 120%;
         }
 
         #subhero-2 {
@@ -29,7 +29,7 @@
 </head>
 <body>
     <div id="hero" class="container-fluid p-0">
-        <div class="row">
+        <div class="row m-0">
             <div id="subhero-1" class="col-sm-8">
             </div>
             <div
@@ -48,7 +48,7 @@
                             <input id="password" class="form-control" type="password" placeholder=" Enter Password" required/>
                         </div>
                     
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-error" disabled>Login</button>
                     </form>
                 </div>
 

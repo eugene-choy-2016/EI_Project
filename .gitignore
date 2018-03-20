@@ -1,2 +1,20 @@
 .idea/
-*.ini
+composer.phar
+/vendor/
+web/nbproject/private/
+web/build/
+web/nbbuild/
+web/dist/
+web/nbdist/
+web/.nb-gradle/
+/web/getDepot/nbproject/private/
+/web/getDepot/build/
+/web/nearestDepot/nbproject/private/
+/web/nearestDepot/dist/
+.DS_Store
+.folder
+
+# C-Sharp exclusives
+BusDepot/*.exe
+BusDepot/BusDepot/bin
+BusDepot/BusDepot/obj
