@@ -1,7 +1,7 @@
 import java.util.*;
 import javax.jms.*;
 
-public class TrainMsgAsyncProducer {
+public class TrainMsgSyncProducer {
 
     public static final int QUEUE = 1;
     public static final int TOPIC = 2;
