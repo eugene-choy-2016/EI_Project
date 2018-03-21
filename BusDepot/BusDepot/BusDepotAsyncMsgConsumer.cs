@@ -184,18 +184,43 @@ public class BusDepotAsyncMsgConsumer : IExceptionListener, IMessageListener
     }
 
     public void OnMessage(Message msg)  {
-        try 
-        {
+        // try 
+        // {
 			TextMessage textMsg = (TextMessage)msg;
             Console.WriteLine("Received message: " + textMsg.Text);
+            Console.WriteLine(name + ": Buses have been dispatched to xxx station");
 			// XmlDocument doc = new XmlDocument();
 			// doc.LoadXml(textMsg.Text);
-        } 
-        catch (Exception e) 
-        {
-            Console.Error.WriteLine("Unexpected exception message callback!");
+        // } 
+        // catch (Exception e) 
+        // {
+            // Console.Error.WriteLine("Unexpected exception message callback!");
+            // Console.Error.WriteLine(e.StackTrace);
+            // Environment.Exit(-1);
+        // }
+		
+		try {
+            QueueConnectionFactory factory = new TIBCO.EMS.QueueConnectionFactory(serverUrl);
+            QueueConnection connection = factory.CreateQueueConnection(userName, password);
+            QueueSession session = connection.CreateQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            /*
+             * Use createQueue() to enable sending into dynamic queues.
+             */
+			String queueName = "q.deployed";
+            TIBCO.EMS.Queue queue = session.CreateQueue(queueName);
+            QueueSender sender = session.CreateSender(queue);
+
+            /* publish messages */
+			// TextMessage message = session.CreateTextMessage();
+			// message.Text = "yolo";
+			// sender.Send(message);
+			// Console.WriteLine("Sent message: "+text);
+
+            connection.Close();
+        } catch (EMSException e) {
             Console.Error.WriteLine(e.StackTrace);
-            Environment.Exit(-1);
+            Environment.Exit(0);
         }
     }
 }
