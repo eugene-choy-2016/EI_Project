@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://xmlns.tibco.com/body" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd" schemaLocation="/Schemas/new_breakdown.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" schemaLocation="/Schemas/new_breakdown_formatted.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" schemaLocation="/busRequest.xsd"/>
     <pd:name>Train Breakdown and Resumption of Service.process</pd:name>
-    <pd:startName>Receive Train Breakdown</pd:startName>
+    <pd:startName>JMS Queue Receiver</pd:startName>
     <pd:startX>0</pd:startX>
     <pd:startY>0</pd:startY>
     <pd:returnBindings/>
-    <pd:starter name="Receive Train Breakdown">
+    <pd:starter name="JMS Queue Receiver">
         <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
         <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
-        <pd:x>49</pd:x>
-        <pd:y>98</pd:y>
+        <pd:x>82</pd:x>
+        <pd:y>95</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
                 <transacted>false</transacted>
                 <acknowledgeMode>1</acknowledgeMode>
                 <maxSessions>1</maxSessions>
-                <destination>q.breakdownDetails</destination>
+                <destination>q.breakdown</destination>
             </SessionAttributes>
             <ConfigurableHeaders>
                 <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
@@ -30,153 +33,52 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>997</pd:endX>
-    <pd:endY>284</pd:endY>
+    <pd:endX>1301</pd:endX>
+    <pd:endY>64</pd:endY>
     <pd:errorSchemas/>
-    <pd:processVariables/>
-    <pd:targetNamespace>http://xmlns.example.com/1520427699772</pd:targetNamespace>
-    <pd:activity name="Get Nearest Bus Depot">
-        <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
-        <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>278</pd:x>
-        <pd:y>278</pd:y>
+    <pd:processVariables>
+        <BreakdownDateTime>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Datetime" type="xsd:dateTime"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </BreakdownDateTime>
+        <ResumeFromBreakdownDateTime>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Datetime" type="xsd:dateTime"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResumeFromBreakdownDateTime>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1521192190846</pd:targetNamespace>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>82</pd:x>
+        <pd:y>202</pd:y>
         <config>
-            <enableProtocolUI>None</enableProtocolUI>
-            <restMethodUI>POST</restMethodUI>
-            <restResponseType>JSON</restResponseType>
-            <authChoiceUI>No Authentication</authChoiceUI>
-            <WADLPaths/>
-            <WADLBaseURL/>
-            <restMethodIDUI/>
-            <restURI>http://localhost/busDepot</restURI>
-            <restInputReferNode>
-                <xsd:element name="Parameters">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="Query">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="param" type="xsd:string"/>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                            <xsd:element name="Header" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                            <xsd:element name="Body" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="Form" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Text" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" type="xsd:string" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Binary" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" type="xsd:base64Binary" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Multipart" minOccurs="0" maxOccurs="unbounded">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="content-disposition" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="name" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="filename" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content-type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content-id" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" minOccurs="0">
-                                                        <xsd:complexType>
-                                                            <xsd:choice>
-                                                                <xsd:element name="binary" type="xsd:base64Binary"/>
-                                                                <xsd:element name="text" type="xsd:string"/>
-                                                                <xsd:element name="fileName" type="xsd:string"/>
-                                                            </xsd:choice>
-                                                        </xsd:complexType>
-                                                    </xsd:element>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </restInputReferNode>
-            <restOutputReferNode>
-                <xsd:element name="header">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Date" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Encoding" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Range" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Last-Modifie" type="xsd:string" minOccurs="0"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </restOutputReferNode>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term ref="pfx:breakdown"/>
         </config>
         <pd:inputBindings>
-            <ns2:ActivityInput>
-                <ns2:Parameters>
-                    <Query>
-                        <param>
-                            <xsl:value-of select="$Render-XML/xmlString"/>
-                        </param>
-                    </Query>
-                </ns2:Parameters>
-            </ns2:ActivityInput>
+            <xmlString>
+                <xsl:value-of select="$JMS-Queue-Receiver/ns1:ActivityOutput/Body"/>
+            </xmlString>
         </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Reply to TMS that Buses Deployed">
-        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
-        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
-        <pd:x>624</pd:x>
-        <pd:y>48</pd:y>
-        <config>
-            <PermittedMessageType>Text</PermittedMessageType>
-            <SessionAttributes>
-                <transacted>false</transacted>
-                <acknowledgeMode>1</acknowledgeMode>
-                <maxSessions>1</maxSessions>
-            </SessionAttributes>
-            <ConfigurableHeaders>
-                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
-                <JMSExpiration>0</JMSExpiration>
-                <JMSPriority>4</JMSPriority>
-            </ConfigurableHeaders>
-        </config>
-        <pd:inputBindings/>
     </pd:activity>
     <pd:activity name="Render XML">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>177</pd:x>
-        <pd:y>274</pd:y>
+        <pd:x>206</pd:x>
+        <pd:y>204</pd:y>
         <config>
             <renderAsText>text</renderAsText>
             <validateInput>false</validateInput>
@@ -185,299 +87,236 @@
         <pd:inputBindings>
             <breakdown>
                 <train_id>
-                    <xsl:value-of select="$Parse-XML/root/breakdown/train_id"/>
+                    <xsl:value-of select="$Parse-XML/breakdown/train_id"/>
                 </train_id>
                 <faultType>
-                    <xsl:value-of select="$Parse-XML/root/breakdown/faultType"/>
+                    <xsl:value-of select="$Parse-XML/breakdown/faultType"/>
                 </faultType>
                 <timestamp>
-                    <xsl:value-of select="$Parse-XML/root/breakdown/timestamp"/>
+                    <xsl:value-of select="$Parse-XML/breakdown/timestamp"/>
                 </timestamp>
                 <coordinates>
-                    <xsl:value-of select="concat($Parse-XML/root/breakdown/coordinates/lat, &quot;,&quot;,$Parse-XML/root/breakdown/coordinates/long)"/>
+                    <xsl:value-of select="concat($Parse-XML/breakdown/coordinates/lat, &quot;,&quot;,$Parse-XML/breakdown/coordinates/long)"/>
                 </coordinates>
                 <remark>
-                    <xsl:value-of select="$Parse-XML/root/breakdown/remark"/>
+                    <xsl:value-of select="$Parse-XML/breakdown/remark"/>
                 </remark>
             </breakdown>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Parse XML">
-        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
-        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
-        <pd:x>50</pd:x>
-        <pd:y>272</pd:y>
+    <pd:activity name="Invoke REST API">
+        <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
+        <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
+        <pd:x>204</pd:x>
+        <pd:y>98</pd:y>
         <config>
-            <inputStyle>text</inputStyle>
-            <xsdVersion>default</xsdVersion>
-            <validateOutput>true</validateOutput>
-            <term>
+            <enableProtocolUI>None</enableProtocolUI>
+            <restMethodUI>POST</restMethodUI>
+            <restResponseType>JSON</restResponseType>
+            <authChoiceUI>No Authentication</authChoiceUI>
+            <WADLPaths/>
+            <WADLBaseURL/>
+            <restMethodIDUI/>
+            <restURI>http://localhost:8084/nearestDepot/</restURI>
+            <restInputReferNode>
+                <xsd:element name="Parameters">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Query">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Header" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Body" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Form" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="Text" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content" type="xsd:string" minOccurs="0"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="Binary" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content" type="xsd:base64Binary" minOccurs="0"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="Multipart" minOccurs="0" maxOccurs="unbounded">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="content-disposition" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="filename" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content-type" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content-id" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content" minOccurs="0">
+                                                        <xsd:complexType>
+                                                            <xsd:choice>
+                                                                <xsd:element name="binary" type="xsd:base64Binary"/>
+                                                                <xsd:element name="text" type="xsd:string"/>
+                                                                <xsd:element name="fileName" type="xsd:string"/>
+                                                            </xsd:choice>
+                                                        </xsd:complexType>
+                                                    </xsd:element>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </restInputReferNode>
+            <restOutputReferNode>
+                <xsd:element name="header">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Date" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Range" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Last-Modifie" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </restOutputReferNode>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <ns:Parameters>
+                    <Query>
+                        <param>
+                            <xsl:value-of select="$Render-XML/xmlString"/>
+                        </param>
+                    </Query>
+                </ns:Parameters>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse JSON">
+        <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
+        <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
+        <pd:x>333</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <SchemaType>xsdType</SchemaType>
+            <BadgerfishCheck>false</BadgerfishCheck>
+            <ActivityOutputEditor>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element ref="pfx:breakdown"/>
+                            <xsd:element name="message" type="xsd:string"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
-            </term>
+            </ActivityOutputEditor>
         </config>
         <pd:inputBindings>
-            <xmlString>
-                <xsl:value-of select="$Receive-Train-Breakdown/ns1:ActivityOutput/Body"/>
-            </xmlString>
+            <ns:ActivityInputClass>
+                <jsonString>
+                    <xsl:value-of select="$Invoke-REST-API/ns:RESTOutput/msg"/>
+                </jsonString>
+            </ns:ActivityInputClass>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Send Tweet to Followers">
-        <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
-        <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>608</pd:x>
-        <pd:y>230</pd:y>
+    <pd:activity name="Get Bus Depot Address">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>334</pd:x>
+        <pd:y>202</pd:y>
         <config>
-            <enableProtocolUI>None</enableProtocolUI>
-            <restMethodUI>GET</restMethodUI>
-            <restResponseType>JSON</restResponseType>
-            <authChoiceUI>No Authentication</authChoiceUI>
-            <WADLPaths/>
-            <WADLBaseURL/>
-            <restMethodIDUI/>
-            <restInputReferNode>
-                <xsd:element name="Parameters">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="Query" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                            <xsd:element name="Header" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                            <xsd:element name="Body" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="Form" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Text" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" type="xsd:string" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Binary" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" type="xsd:base64Binary" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Multipart" minOccurs="0" maxOccurs="unbounded">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="content-disposition" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="name" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="filename" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content-type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content-id" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" minOccurs="0">
-                                                        <xsd:complexType>
-                                                            <xsd:choice>
-                                                                <xsd:element name="binary" type="xsd:base64Binary"/>
-                                                                <xsd:element name="text" type="xsd:string"/>
-                                                                <xsd:element name="fileName" type="xsd:string"/>
-                                                            </xsd:choice>
-                                                        </xsd:complexType>
-                                                    </xsd:element>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </restInputReferNode>
-            <restOutputReferNode>
-                <xsd:element name="header">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Date" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Encoding" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Range" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Last-Modifie" type="xsd:string" minOccurs="0"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </restOutputReferNode>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/Connection/JDBC Connection.sharedjdbc</jdbcSharedConfig>
+            <statement>select queue from location where ID =?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>ID</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>queue</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
         </config>
-        <pd:inputBindings/>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <ID>
+                    <xsl:value-of select="$Parse-JSON/ns:ActivityOutputClass/root/message"/>
+                </ID>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Render-XML-1">
+    <pd:activity name="Render Bus Request XML">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>492</pd:x>
-        <pd:y>41</pd:y>
+        <pd:x>446</pd:x>
+        <pd:y>201</pd:y>
         <config>
-            <renderAsText>binary</renderAsText>
+            <renderAsText>text</renderAsText>
             <validateInput>false</validateInput>
-        </config>
-        <pd:inputBindings/>
-    </pd:activity>
-    <pd:activity name="Wait for Resumed service message">
-        <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
-        <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
-        <pd:x>731</pd:x>
-        <pd:y>223</pd:y>
-        <config>
-            <_eventTimeout>60000</_eventTimeout>
-            <PermittedMessageType>Text</PermittedMessageType>
-            <SessionAttributes>
-                <transacted>false</transacted>
-                <acknowledgeMode>1</acknowledgeMode>
-                <maxSessions>-1</maxSessions>
-            </SessionAttributes>
-            <ConfigurableHeaders>
-                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
-                <JMSExpiration>0</JMSExpiration>
-                <JMSPriority>4</JMSPriority>
-            </ConfigurableHeaders>
+            <term ref="pfx3:busRequest"/>
         </config>
         <pd:inputBindings>
-            <ns:input/>
+            <busRequest>
+                <station>
+                    <xsl:value-of select="$Parse-XML/breakdown/remark"/>
+                </station>
+                <reason>
+                    <xsl:value-of select="$Parse-XML/breakdown/faultType"/>
+                </reason>
+                <timestamp>
+                    <xsl:value-of select="$Parse-XML/breakdown/timestamp"/>
+                </timestamp>
+                <coords>
+                    <lat>
+                        <xsl:value-of select="$Parse-XML/breakdown/coordinates/lat"/>
+                    </lat>
+                    <long>
+                        <xsl:value-of select="$Parse-XML/breakdown/coordinates/long"/>
+                    </long>
+                </coords>
+            </busRequest>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Send Tweet to Followers about Resumption of Service">
-        <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
-        <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>734</pd:x>
-        <pd:y>64</pd:y>
-        <config>
-            <enableProtocolUI>None</enableProtocolUI>
-            <restMethodUI>GET</restMethodUI>
-            <restResponseType>JSON</restResponseType>
-            <authChoiceUI>No Authentication</authChoiceUI>
-            <WADLPaths/>
-            <WADLBaseURL/>
-            <restMethodIDUI/>
-            <restInputReferNode>
-                <xsd:element name="Parameters">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="Query" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                            <xsd:element name="Header" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                            <xsd:element name="Body" minOccurs="0">
-                                <xsd:complexType>
-                                    <xsd:sequence>
-                                        <xsd:element name="Form" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="param" type="xsd:string" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Text" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" type="xsd:string" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Binary" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" type="xsd:base64Binary" minOccurs="0"/>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                        <xsd:element name="Multipart" minOccurs="0" maxOccurs="unbounded">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="content-disposition" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="name" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="filename" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content-type" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content-id" type="xsd:string" minOccurs="0"/>
-                                                    <xsd:element name="content" minOccurs="0">
-                                                        <xsd:complexType>
-                                                            <xsd:choice>
-                                                                <xsd:element name="binary" type="xsd:base64Binary"/>
-                                                                <xsd:element name="text" type="xsd:string"/>
-                                                                <xsd:element name="fileName" type="xsd:string"/>
-                                                            </xsd:choice>
-                                                        </xsd:complexType>
-                                                    </xsd:element>
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
-                                    </xsd:sequence>
-                                </xsd:complexType>
-                            </xsd:element>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </restInputReferNode>
-            <restOutputReferNode>
-                <xsd:element name="header">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Date" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Encoding" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Content-Range" type="xsd:string" minOccurs="0"/>
-                            <xsd:element name="Last-Modifie" type="xsd:string" minOccurs="0"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </restOutputReferNode>
-        </config>
-        <pd:inputBindings/>
-    </pd:activity>
-    <pd:activity name="Send Undeploy message to Bus Depot">
+    <pd:activity name="Send Deploy Request to Bus Depot">
         <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
-        <pd:x>874</pd:x>
-        <pd:y>50</pd:y>
+        <pd:x>445</pd:x>
+        <pd:y>81</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -490,72 +329,323 @@
                 <JMSExpiration>0</JMSExpiration>
                 <JMSPriority>4</JMSPriority>
             </ConfigurableHeaders>
+            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
         </config>
-        <pd:inputBindings/>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <xsl:if test="$Get-Bus-Depot-Address/resultSet/Record[1]/queue">
+                    <destinationQueue>
+                        <xsl:value-of select="$Get-Bus-Depot-Address/resultSet/Record[1]/queue"/>
+                    </destinationQueue>
+                </xsl:if>
+                <Body>
+                    <xsl:value-of select="$Render-Bus-Request-XML/xmlString"/>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Log Incident in CSV">
+    <pd:activity name="Reply to JMS Message">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>547</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>JMS Queue Receiver</EventSource>
+            </ConfigurableHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <Body>
+                    <xsl:value-of select="&quot;Buses Deployed&quot;"/>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Tweet Train Breakdown">
+        <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
+        <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
+        <pd:x>665</pd:x>
+        <pd:y>197</pd:y>
+        <config>
+            <PublishType>Tweet</PublishType>
+            <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
+        </config>
+        <pd:inputBindings>
+            <PublishTweetInput>
+                <status>
+                    <xsl:value-of select="concat($BreakdownDateTime/root/Datetime,&quot;: &quot;,$Parse-XML/breakdown/faultType, &quot; at &quot;,  $Parse-XML/breakdown/remark, &quot; . Bus services have been deployed to the affected stations.&quot;)"/>
+                </status>
+            </PublishTweetInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wait for Resumed service message">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
+        <pd:x>670</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>-1</maxSessions>
+                <destination>q.resumed</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns2:input/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Store Trainbreakdown datetime">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>555</pd:x>
+        <pd:y>198</pd:y>
+        <config>
+            <variableName>BreakdownDateTime</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Datetime>
+                    <xsl:value-of select="tib:current-dateTime-timezone(8, 0)"/>
+                </Datetime>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Tweet Train Resume service">
+        <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
+        <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
+        <pd:x>898</pd:x>
+        <pd:y>202</pd:y>
+        <config>
+            <PublishType>Tweet</PublishType>
+            <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
+        </config>
+        <pd:inputBindings>
+            <PublishTweetInput>
+                <status>
+                    <xsl:value-of select="concat($ResumeFromBreakdownDateTime/root/Datetime,&quot;: Train Service at &quot;, $Parse-XML/breakdown/remark, &quot; has resumed.&quot;)"/>
+                </status>
+            </PublishTweetInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Undeploy message to Bus Depot">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>777</pd:x>
+        <pd:y>82</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination/>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <xsl:if test="$Get-Bus-Depot-Address/resultSet/Record[1]/queue">
+                    <destinationQueue>
+                        <xsl:value-of select="$Get-Bus-Depot-Address/resultSet/Record[1]/queue"/>
+                    </destinationQueue>
+                </xsl:if>
+                <Body>
+                    <xsl:value-of select="&quot;Stop deploying bus&quot;"/>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Store Train resume service datetime">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>774</pd:x>
+        <pd:y>203</pd:y>
+        <config>
+            <variableName>ResumeFromBreakdownDateTime</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Datetime>
+                    <xsl:value-of select="tib:current-dateTime-timezone(8, 0)"/>
+                </Datetime>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write information to file">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>998</pd:x>
-        <pd:y>44</pd:y>
+        <pd:x>1045</pd:x>
+        <pd:y>177</pd:y>
         <config>
             <encoding>text</encoding>
             <compressFile>None</compressFile>
-        </config>
-        <pd:inputBindings/>
-    </pd:activity>
-    <pd:activity name="Get Bus Depot Address">
-        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
-        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>388</pd:x>
-        <pd:y>125</pd:y>
-        <config>
-            <timeout>10</timeout>
-            <commit>false</commit>
-            <maxRows>100</maxRows>
-            <emptyStrAsNil>false</emptyStrAsNil>
-            <statement>select queue from location where id = ?</statement>
-            <jdbcSharedConfig>/Connection/JDBC Connection.sharedjdbc</jdbcSharedConfig>
-            <oraObjects/>
-            <oraTables/>
-            <QueryOutputCachedSchemaColumns>queue</QueryOutputCachedSchemaColumns>
-            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
-            <QueryOutputCachedSchemaDataTypesName>VARCHAR</QueryOutputCachedSchemaDataTypesName>
-            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
-            <Prepared_Param_DataType>
-                <parameter>
-                    <parameterName>id</parameterName>
-                    <dataType>VARCHAR</dataType>
-                </parameter>
-            </Prepared_Param_DataType>
+            <append>true</append>
         </config>
         <pd:inputBindings>
-            <jdbcQueryActivityInput>
-                <id>
-                    <xsl:value-of select="$Get-Nearest-Bus-Depot/ns2:RESTOutput/msg"/>
-                </id>
-            </jdbcQueryActivityInput>
+            <ns3:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="concat($BreakdownDateTime/root/Datetime, &quot;,&quot;, $Parse-XML/breakdown/coordinates/lat,&quot;,&quot;, $Parse-XML/breakdown/coordinates/long,&quot;,&quot;,$ResumeFromBreakdownDateTime/root/Datetime)"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns3:WriteActivityInputTextClass>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Parse JSON">
-        <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
-        <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
-        <pd:x>452</pd:x>
-        <pd:y>204</pd:y>
-        <config>
-            <SchemaType>xsdType</SchemaType>
-            <BadgerfishCheck>false</BadgerfishCheck>
-        </config>
-        <pd:inputBindings/>
+    <pd:activity name="Create File">
+        <pd:type>com.tibco.plugin.file.FileCreateActivity</pd:type>
+        <pd:resourceType>ae.activities.FileCreateActivity</pd:resourceType>
+        <pd:x>1042</pd:x>
+        <pd:y>74</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns3:CreateActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+            </ns3:CreateActivityInputClass>
+        </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Email COO">
+    <pd:activity name="Write Headers to file">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>1195</pd:x>
+        <pd:y>79</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <append>true</append>
+        </config>
+        <pd:inputBindings>
+            <ns3:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="&quot;Time of Breakdown, lat, long, Time of resume&quot;"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns3:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check file exist">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>894</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <fileName>TrainBreakdownandResumptionofServiceCheckfileexist</fileName>
+            <packageName>TrainBreakdownandResumptionofService</packageName>
+            <fullsource>package TrainBreakdownandResumptionofService;
+import java.util.*;
+import java.io.*;
+public class TrainBreakdownandResumptionofServiceCheckfileexist{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String fileName = "";
+	protected boolean fileExists = false;
+	public String getfileName() {
+		return fileName;
+	}
+	public void setfileName(String val) {
+		fileName = val;
+	}
+	public boolean getfileExists() {
+		return fileExists;
+	}
+	public void setfileExists(boolean val) {
+		fileExists = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public TrainBreakdownandResumptionofServiceCheckfileexist() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String fileName
+	Out : boolean fileExists
+* Available Variables: DO NOT MODIFY *****/
+
+File f = new File(fileName );
+if (f.exists())
+fileExists =  true;
+else fileExists = false;}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>fileName</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </inputData>
+            <outputData>
+                <row>
+                    <fieldName>fileExists</fieldName>
+                    <fieldType>boolean</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>TrainBreakdownandResumptionofServiceCheckfileexist</name>
+                    <byteCode>yv66vgAAADMALAkACAAhCQAIACIKAAkAIwgAJAcAJQoABQAmCgAFACcHACgHACkBAAhmaWxlTmFtZQEAEkxqYXZhL2xhbmcvU3RyaW5nOwEACmZpbGVFeGlzdHMBAAFaAQALZ2V0ZmlsZU5hbWUBABQoKUxqYXZhL2xhbmcvU3RyaW5nOwEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBAAtzZXRmaWxlTmFtZQEAFShMamF2YS9sYW5nL1N0cmluZzspVgEADWdldGZpbGVFeGlzdHMBAAMoKVoBAA1zZXRmaWxlRXhpc3RzAQAEKFopVgEABjxpbml0PgEAAygpVgEABmludm9rZQEADVN0YWNrTWFwVGFibGUHACUBAApFeGNlcHRpb25zBwAqAQAKU291cmNlRmlsZQEAN1RyYWluQnJlYWtkb3duYW5kUmVzdW1wdGlvbm9mU2VydmljZUNoZWNrZmlsZWV4aXN0LmphdmEMAAoACwwADAANDAAYABkBAAABAAxqYXZhL2lvL0ZpbGUMABgAEwwAKwAVAQBXVHJhaW5CcmVha2Rvd25hbmRSZXN1bXB0aW9ub2ZTZXJ2aWNlL1RyYWluQnJlYWtkb3duYW5kUmVzdW1wdGlvbm9mU2VydmljZUNoZWNrZmlsZWV4aXN0AQAQamF2YS9sYW5nL09iamVjdAEAE2phdmEvbGFuZy9FeGNlcHRpb24BAAZleGlzdHMAIQAIAAkAAAACAAQACgALAAAABAAMAA0AAAAGAAEADgAPAAEAEAAAAB0AAQABAAAABSq0AAGwAAAAAQARAAAABgABAAAACQABABIAEwABABAAAAAiAAIAAgAAAAYqK7UAAbEAAAABABEAAAAKAAIAAAAMAAUADQABABQAFQABABAAAAAdAAEAAQAAAAUqtAACrAAAAAEAEQAAAAYAAQAAAA8AAQAWABcAAQAQAAAAIgACAAIAAAAGKhu1AAKxAAAAAQARAAAACgACAAAAEgAFABMAAQAYABkAAQAQAAAANAACAAEAAAAQKrcAAyoSBLUAASoDtQACsQAAAAEAEQAAABIABAAAABUABAAGAAoABwAPABYAAQAaABkAAgAQAAAAVAADAAIAAAAhuwAFWSq0AAG3AAZMK7YAB5kACyoEtQACpwAIKgO1AAKxAAAAAgARAAAAEgAEAAAAHQAMAB4AEwAfABsAIAAbAAAACQAC/AAbBwAcBAAdAAAABAABAB4AAQAfAAAAAgAg</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Mail">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>995</pd:x>
-        <pd:y>148</pd:y>
+        <pd:x>1195</pd:x>
+        <pd:y>178</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
+            <useSsl>true</useSsl>
+            <authenticate>true</authenticate>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+                <ns0:cert isRef="true">/certs</ns0:cert>
+                <ns0:verifyHostName>true</ns0:verifyHostName>
+            </ns0:ssl>
+            <host>smtp.gmail.com:587</host>
+            <username>ei.smrt.logs@gmail.com</username>
+            <password>pastword123</password>
             <InputHeaders>
                 <xsd:element name="root">
                     <xsd:complexType>
@@ -566,68 +656,34 @@
                 </xsd:element>
             </InputHeaders>
         </config>
-        <pd:inputBindings/>
+        <pd:inputBindings>
+            <ns4:mailActivityInput>
+                <username>
+                    <xsl:value-of select="&quot;ei.smrt.logs@gmail.com&quot;"/>
+                </username>
+                <password>
+                    <xsl:value-of select="&quot;pastword123&quot;"/>
+                </password>
+                <from>
+                    <xsl:value-of select="&quot;ei.smrt.logs@gmail.com&quot;"/>
+                </from>
+                <to>
+                    <xsl:value-of select="&quot;ei.smrt.coo@gmail.com&quot;"/>
+                </to>
+                <subject>
+                    <xsl:value-of select="&quot;Notification of Incident&quot;"/>
+                </subject>
+                <ns6:bodyElement>
+                    <bodyText>
+                        <xsl:value-of select="concat(&quot;Dear Sir,\n\n Incident Report: &quot;, tib:get-day-from-dateTime($BreakdownDateTime/root/Datetime),tib:get-month-from-dateTime($BreakdownDateTime/root/Datetime),&quot;\n Incident Type: &quot;,$Parse-XML/breakdown/faultType, &quot;\n Start Time: &quot;,tib:get-hours-from-dateTime($BreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-minutes-from-dateTime($BreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-seconds-from-dateTime($BreakdownDateTime/root/Datetime),&quot;\n End Time: &quot;,tib:get-hours-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-minutes-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-seconds-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime), &quot;\n Downtime of operations: &quot;)"/>
+                    </bodyText>
+                </ns6:bodyElement>
+            </ns4:mailActivityInput>
+        </pd:inputBindings>
     </pd:activity>
     <pd:transition>
-        <pd:from>Receive Train Breakdown</pd:from>
+        <pd:from>JMS Queue Receiver</pd:from>
         <pd:to>Parse XML</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Reply to TMS that Buses Deployed</pd:from>
-        <pd:to>Send Tweet to Followers</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Render-XML-1</pd:from>
-        <pd:to>Reply to TMS that Buses Deployed</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Send Tweet to Followers</pd:from>
-        <pd:to>Wait for Resumed service message</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Wait for Resumed service message</pd:from>
-        <pd:to>Send Tweet to Followers about Resumption of Service</pd:to>
-        <pd:xpathDescription/>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Send Tweet to Followers about Resumption of Service</pd:from>
-        <pd:to>Send Undeploy message to Bus Depot</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Send Undeploy message to Bus Depot</pd:from>
-        <pd:to>Log Incident in CSV</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Parse JSON</pd:from>
-        <pd:to>Get Bus Depot Address</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Log Incident in CSV</pd:from>
-        <pd:to>Email COO</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -641,28 +697,135 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Render XML</pd:from>
-        <pd:to>Get Nearest Bus Depot</pd:to>
+        <pd:to>Invoke REST API</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Invoke REST API</pd:from>
+        <pd:to>Parse JSON</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse JSON</pd:from>
+        <pd:to>Get Bus Depot Address</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Get Bus Depot Address</pd:from>
-        <pd:to>Render-XML-1</pd:to>
+        <pd:to>Render Bus Request XML</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Email COO</pd:from>
+        <pd:from>Render Bus Request XML</pd:from>
+        <pd:to>Send Deploy Request to Bus Depot</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Deploy Request to Bus Depot</pd:from>
+        <pd:to>Reply to JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to JMS Message</pd:from>
+        <pd:to>Store Trainbreakdown datetime</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Store Trainbreakdown datetime</pd:from>
+        <pd:to>Tweet Train Breakdown</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Tweet Train Breakdown</pd:from>
+        <pd:to>Wait for Resumed service message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for Resumed service message</pd:from>
+        <pd:to>Send Undeploy message to Bus Depot</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Undeploy message to Bus Depot</pd:from>
+        <pd:to>Store Train resume service datetime</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Store Train resume service datetime</pd:from>
+        <pd:to>Tweet Train Resume service</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create File</pd:from>
+        <pd:to>Write Headers to file</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write Headers to file</pd:from>
+        <pd:to>Write information to file</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Tweet Train Resume service</pd:from>
+        <pd:to>Check file exist</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check file exist</pd:from>
+        <pd:to>Create File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Check-file-exist/javaCodeActivityOutput/fileExists="false"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check file exist</pd:from>
+        <pd:to>Write information to file</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Check-file-exist/javaCodeActivityOutput/fileExists="true"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write information to file</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
         <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Get Nearest Bus Depot</pd:from>
-        <pd:to>Parse JSON</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
