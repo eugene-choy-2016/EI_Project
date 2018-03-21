@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd" schemaLocation="/Schemas/new_breakdown.xsd"/>
@@ -33,10 +33,29 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>1168</pd:endX>
-    <pd:endY>95</pd:endY>
+    <pd:endX>1573</pd:endX>
+    <pd:endY>189</pd:endY>
     <pd:errorSchemas/>
-    <pd:processVariables/>
+    <pd:processVariables>
+        <BreakdownDateTime>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Datetime" type="xsd:dateTime"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </BreakdownDateTime>
+        <ResumeFromBreakdownDateTime>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="param" type="xsd:dateTime"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ResumeFromBreakdownDateTime>
+    </pd:processVariables>
     <pd:targetNamespace>http://xmlns.example.com/1521192190846</pd:targetNamespace>
     <pd:activity name="Parse XML">
         <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
@@ -352,7 +371,7 @@
             </ns1:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="TwitterPublish Activity">
+    <pd:activity name="Tweet Train Breakdown">
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
         <pd:x>1080</pd:x>
@@ -364,16 +383,16 @@
         <pd:inputBindings>
             <PublishTweetInput>
                 <status>
-                    <xsl:value-of select="concat(current-dateTime(),&quot;: &quot;,$Parse-XML/breakdown/faultType, &quot; at &quot;,  $Parse-XML/breakdown/remark, &quot; . Bus services have been deployed to the affected stations.&quot;)"/>
+                    <xsl:value-of select="concat($BreakdownDateTime/root/Datetime,&quot;: &quot;,$Parse-XML/breakdown/faultType, &quot; at &quot;,  $Parse-XML/breakdown/remark, &quot; . Bus services have been deployed to the affected stations.&quot;)"/>
                 </status>
             </PublishTweetInput>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Wait for JMS Queue Message">
+    <pd:activity name="Wait for Resumed service message">
         <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
-        <pd:x>815</pd:x>
-        <pd:y>426</pd:y>
+        <pd:x>784</pd:x>
+        <pd:y>438</pd:y>
         <config>
             <_eventTimeout>60000</_eventTimeout>
             <PermittedMessageType>Text</PermittedMessageType>
@@ -392,6 +411,228 @@
         </config>
         <pd:inputBindings>
             <ns2:input/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Store Trainbreakdown datetime">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1145</pd:x>
+        <pd:y>309</pd:y>
+        <config>
+            <variableName>BreakdownDateTime</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Datetime>
+                    <xsl:value-of select="tib:current-dateTime-timezone(8, 0)"/>
+                </Datetime>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Tweet Train Resume service">
+        <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
+        <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
+        <pd:x>1170</pd:x>
+        <pd:y>567</pd:y>
+        <config>
+            <PublishType>Tweet</PublishType>
+            <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
+        </config>
+        <pd:inputBindings>
+            <PublishTweetInput>
+                <status>
+                    <xsl:value-of select="concat($ResumeFromBreakdownDateTime/root/param,&quot;: train service at &quot;, $Parse-XML/breakdown/remark, &quot; has resumed.&quot;)"/>
+                </status>
+            </PublishTweetInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Undeploy message to Bus Depot">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>793</pd:x>
+        <pd:y>559</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Store Train resume service datetime">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>963</pd:x>
+        <pd:y>564</pd:y>
+        <config>
+            <variableName>ResumeFromBreakdownDateTime</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <param>
+                    <xsl:value-of select="tib:current-dateTime-timezone(8, 0)"/>
+                </param>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write File">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>1466</pd:x>
+        <pd:y>398</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+        </config>
+        <pd:inputBindings>
+            <ns3:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="concat($BreakdownDateTime/root/Datetime, $Parse-XML/breakdown/coordinates/lat,$Parse-XML/breakdown/coordinates/long,$ResumeFromBreakdownDateTime/root/param)"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns3:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Mail">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>1530</pd:x>
+        <pd:y>290</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <InputHeaders>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Create File">
+        <pd:type>com.tibco.plugin.file.FileCreateActivity</pd:type>
+        <pd:resourceType>ae.activities.FileCreateActivity</pd:resourceType>
+        <pd:x>1252</pd:x>
+        <pd:y>390</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns3:CreateActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+            </ns3:CreateActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write-File-1">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>1344</pd:x>
+        <pd:y>332</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <append>true</append>
+        </config>
+        <pd:inputBindings>
+            <ns3:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="&quot;Time of Breakdown, lat, long, Time of resume&quot;"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+            </ns3:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check file exist">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>1289</pd:x>
+        <pd:y>511</pd:y>
+        <config>
+            <fileName>TrainBreakdownTestingCheckfileexist</fileName>
+            <packageName>TrainBreakdownTesting</packageName>
+            <fullsource>package TrainBreakdownTesting;
+import java.util.*;
+import java.io.*;
+public class TrainBreakdownTestingCheckfileexist{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String fileName = "";
+	protected boolean fileExists = false;
+	public String getfileName() {
+		return fileName;
+	}
+	public void setfileName(String val) {
+		fileName = val;
+	}
+	public boolean getfileExists() {
+		return fileExists;
+	}
+	public void setfileExists(boolean val) {
+		fileExists = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public TrainBreakdownTestingCheckfileexist() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String fileName
+	Out : boolean fileExists
+* Available Variables: DO NOT MODIFY *****/
+
+File f = new File(fileName );
+if (f.exists())
+fileExists =  true;
+else fileExists = false;}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>fileName</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </inputData>
+            <outputData>
+                <row>
+                    <fieldName>fileExists</fieldName>
+                    <fieldType>boolean</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>TrainBreakdownTestingCheckfileexist</name>
+                    <byteCode>yv66vgAAADMALAkACAAhCQAIACIKAAkAIwgAJAcAJQoABQAmCgAFACcHACgHACkBAAhmaWxlTmFtZQEAEkxqYXZhL2xhbmcvU3RyaW5nOwEACmZpbGVFeGlzdHMBAAFaAQALZ2V0ZmlsZU5hbWUBABQoKUxqYXZhL2xhbmcvU3RyaW5nOwEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBAAtzZXRmaWxlTmFtZQEAFShMamF2YS9sYW5nL1N0cmluZzspVgEADWdldGZpbGVFeGlzdHMBAAMoKVoBAA1zZXRmaWxlRXhpc3RzAQAEKFopVgEABjxpbml0PgEAAygpVgEABmludm9rZQEADVN0YWNrTWFwVGFibGUHACUBAApFeGNlcHRpb25zBwAqAQAKU291cmNlRmlsZQEAKFRyYWluQnJlYWtkb3duVGVzdGluZ0NoZWNrZmlsZWV4aXN0LmphdmEMAAoACwwADAANDAAYABkBAAABAAxqYXZhL2lvL0ZpbGUMABgAEwwAKwAVAQA5VHJhaW5CcmVha2Rvd25UZXN0aW5nL1RyYWluQnJlYWtkb3duVGVzdGluZ0NoZWNrZmlsZWV4aXN0AQAQamF2YS9sYW5nL09iamVjdAEAE2phdmEvbGFuZy9FeGNlcHRpb24BAAZleGlzdHMAIQAIAAkAAAACAAQACgALAAAABAAMAA0AAAAGAAEADgAPAAEAEAAAAB0AAQABAAAABSq0AAGwAAAAAQARAAAABgABAAAACQABABIAEwABABAAAAAiAAIAAgAAAAYqK7UAAbEAAAABABEAAAAKAAIAAAAMAAUADQABABQAFQABABAAAAAdAAEAAQAAAAUqtAACrAAAAAEAEQAAAAYAAQAAAA8AAQAWABcAAQAQAAAAIgACAAIAAAAGKhu1AAKxAAAAAQARAAAACgACAAAAEgAFABMAAQAYABkAAQAQAAAANAACAAEAAAAQKrcAAyoSBLUAASoDtQACsQAAAAEAEQAAABIABAAAABUABAAGAAoABwAPABYAAQAaABkAAgAQAAAAVAADAAIAAAAhuwAFWSq0AAG3AAZMK7YAB5kACyoEtQACpwAIKgO1AAKxAAAAAgARAAAAEgAEAAAAHQAMAB4AEwAfABsAIAAbAAAACQAC/AAbBwAcBAAdAAAABAABAB4AAQAfAAAAAgAg</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                </fileName>
+            </javaCodeActivityInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -452,22 +693,91 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Reply to JMS Message</pd:from>
-        <pd:to>TwitterPublish Activity</pd:to>
-        <pd:xpathDescription/>
+        <pd:to>Store Trainbreakdown datetime</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>TwitterPublish Activity</pd:from>
-        <pd:to>Wait for JMS Queue Message</pd:to>
+        <pd:from>Store Trainbreakdown datetime</pd:from>
+        <pd:to>Tweet Train Breakdown</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Wait for JMS Queue Message</pd:from>
+        <pd:from>Tweet Train Breakdown</pd:from>
+        <pd:to>Wait for Resumed service message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for Resumed service message</pd:from>
+        <pd:to>Send Undeploy message to Bus Depot</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Undeploy message to Bus Depot</pd:from>
+        <pd:to>Store Train resume service datetime</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Store Train resume service datetime</pd:from>
+        <pd:to>Tweet Train Resume service</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write File</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
         <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Create File</pd:from>
+        <pd:to>Write-File-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write-File-1</pd:from>
+        <pd:to>Write File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Tweet Train Resume service</pd:from>
+        <pd:to>Check file exist</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check file exist</pd:from>
+        <pd:to>Create File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check file exist</pd:from>
+        <pd:to>Write File</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
