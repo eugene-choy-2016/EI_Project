@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://xmlns.tibco.com/body" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://xmlns.tibco.com/body" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd" schemaLocation="/Schemas/new_breakdown.xsd"/>
@@ -383,7 +383,7 @@
         <pd:inputBindings>
             <PublishTweetInput>
                 <status>
-                    <xsl:value-of select="concat($BreakdownDateTime/root/Datetime,&quot;: &quot;,$Parse-XML/breakdown/faultType, &quot; at &quot;,  $Parse-XML/breakdown/remark, &quot; . Bus services have been deployed to the affected stations.&quot;)"/>
+                    <xsl:value-of select="concat(tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;,$BreakdownDateTime/root/Datetime),&quot;: &quot;,$Parse-XML/breakdown/faultType, &quot; at &quot;,  $Parse-XML/breakdown/remark, &quot; . Bus services have been deployed to the affected stations.&quot;)"/>
                 </status>
             </PublishTweetInput>
         </pd:inputBindings>
@@ -441,7 +441,7 @@
         <pd:inputBindings>
             <PublishTweetInput>
                 <status>
-                    <xsl:value-of select="concat($ResumeFromBreakdownDateTime/root/Datetime,&quot;: Train Service at &quot;, $Parse-XML/breakdown/remark, &quot; has resumed.&quot;)"/>
+                    <xsl:value-of select="concat(tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;,$ResumeFromBreakdownDateTime/root/Datetime),&quot;: Train Service at &quot;, $Parse-XML/breakdown/remark, &quot; has resumed.&quot;)"/>
                 </status>
             </PublishTweetInput>
         </pd:inputBindings>
@@ -498,7 +498,7 @@
     <pd:activity name="Write information to file">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>1045</pd:x>
+        <pd:x>1046</pd:x>
         <pd:y>177</pd:y>
         <config>
             <encoding>text</encoding>
@@ -511,7 +511,7 @@
                     <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
                 </fileName>
                 <textContent>
-                    <xsl:value-of select="concat($BreakdownDateTime/root/Datetime, &quot;,&quot;, $Parse-XML/breakdown/coordinates/lat,&quot;,&quot;, $Parse-XML/breakdown/coordinates/long,&quot;,&quot;,$ResumeFromBreakdownDateTime/root/Datetime)"/>
+                    <xsl:value-of select="concat(tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;,$BreakdownDateTime/root/Datetime), &quot;,&quot;, $Parse-XML/breakdown/coordinates/lat,&quot;,&quot;, $Parse-XML/breakdown/coordinates/long,&quot;,&quot;,tib:format-dateTime(&quot;F M y hh:mm:ss a&quot;,$ResumeFromBreakdownDateTime/root/Datetime))"/>
                 </textContent>
                 <addLineSeparator>
                     <xsl:value-of select="1"/>
@@ -631,8 +631,8 @@ else fileExists = false;}
     <pd:activity name="Send Mail">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>1195</pd:x>
-        <pd:y>178</pd:y>
+        <pd:x>1196</pd:x>
+        <pd:y>179</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
@@ -675,7 +675,7 @@ else fileExists = false;}
                 </subject>
                 <ns6:bodyElement>
                     <bodyText>
-                        <xsl:value-of select="concat(&quot;Dear Sir,\n\n Incident Report: &quot;, tib:get-day-from-dateTime($BreakdownDateTime/root/Datetime),tib:get-month-from-dateTime($BreakdownDateTime/root/Datetime),&quot;\n Incident Type: &quot;,$Parse-XML/breakdown/faultType, &quot;\n Start Time: &quot;,tib:get-hours-from-dateTime($BreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-minutes-from-dateTime($BreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-seconds-from-dateTime($BreakdownDateTime/root/Datetime),&quot;\n End Time: &quot;,tib:get-hours-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-minutes-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime),&quot;:&quot;,tib:get-seconds-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime), &quot;\n Downtime of operations: &quot;)"/>
+                        <xsl:value-of select="concat(&quot;Dear Sir,&#xA; &#xA;Incident Report: &quot;,tib:format-dateTime(&quot;F MMM y&quot;, $ResumeFromBreakdownDateTime/root/Datetime) ,&quot;&#xA;Incident Type: &quot;,$Parse-XML/breakdown/faultType, &quot;&#xA;Start Time: &quot;,tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;, $BreakdownDateTime/root/Datetime),&quot;&#xA;End Time: &quot;,tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;, $ResumeFromBreakdownDateTime/root/Datetime), &quot;&#xA;Downtime of operations: &quot;,(tib:get-day-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime) - tib:get-day-from-dateTime($BreakdownDateTime/root/Datetime)) * 1440 +(tib:get-hours-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime) - tib:get-hours-from-dateTime($BreakdownDateTime/root/Datetime)) * 60+tib:get-minutes-from-dateTime($ResumeFromBreakdownDateTime/root/Datetime) - tib:get-minutes-from-dateTime($BreakdownDateTime/root/Datetime),&quot; minutes&#xA;&#xA;For your information.&#xA;&#xA;-Auto generated Message-&quot;)"/>
                     </bodyText>
                 </ns6:bodyElement>
             </ns4:mailActivityInput>
