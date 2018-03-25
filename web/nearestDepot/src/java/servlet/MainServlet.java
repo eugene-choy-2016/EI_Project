@@ -5,6 +5,8 @@
  */
 package servlet;
 
+import is203.JWTException;
+import is203.JWTUtility;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,6 +52,33 @@ public class MainServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        // Perform JWT Verification here
+        String user = request.getParameter("user");
+        String token = request.getParameter("token");
+        String error = "";
+        try {
+            if (user == null) {
+                error = "Missing user";
+            } else if (token == null) {
+                error = "Missing token";
+            } else if (!JWTUtility.verify(token, JWTServlet.sharedSecret).equals(user)) {
+                error = "Invalid token";
+            }
+        } catch (JWTException ex) {
+            error = ex.getMessage();
+        }
+        if (!error.isEmpty()) {
+            JSONObject json = new JSONObject();
+            try (PrintWriter out = response.getWriter()) {
+                json.put("message", "");
+                json.put("status", "fail");
+                json.put("error", error);
+                out.write(json.toJSONString());
+            }
+            return;
+        }
+        // End of JWT Verification
+        
         final String workDir = "C:\\EI\\busDepot\\";
         
         InputStream xml = null;
@@ -57,14 +86,16 @@ public class MainServlet extends HttpServlet {
         JSONObject json = new JSONObject();
         response.setContentType("application/json");
         try (PrintWriter out = response.getWriter()) {
-            Enumeration<String> e = request.getParameterNames();
-            String stringValue = "";
-            while(e.hasMoreElements()){
-                String s = e.nextElement();
-                stringValue = request.getParameter(s);
-                xml = new ByteArrayInputStream(stringValue.getBytes(StandardCharsets.UTF_8));
-                System.out.println(s + ": " +" : "+(request.getParameter(s) instanceof String) + request.getParameter(s));
-            }
+//            Enumeration<String> e = request.getParameterNames();
+//            String stringValue = "";
+//            while(e.hasMoreElements()){
+//                String s = e.nextElement();
+//                stringValue = request.getParameter(s);
+//                xml = new ByteArrayInputStream(stringValue.getBytes(StandardCharsets.UTF_8));
+//                System.out.println(s + ": " +" : "+(request.getParameter(s) instanceof String) + request.getParameter(s));
+//            }
+            String stringValue = request.getParameter("param");
+            xml = new ByteArrayInputStream(stringValue.getBytes(StandardCharsets.UTF_8));
             
             if(verifyAgainstXSD.verify(xml, xsd)){
                 System.out.println("VERIFIED");

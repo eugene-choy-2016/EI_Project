@@ -1,6 +1,6 @@
 copy TrainManagementSystem.java C:\tibco\ems\6.0\samples\java
 copy TrainMsgProducer.java C:\tibco\ems\6.0\samples\java
-copy TrainMsgAsyncProducer.java C:\tibco\ems\6.0\samples\java
+copy TrainMsgSyncProducer.java C:\tibco\ems\6.0\samples\java
 
 if not exist "C:\EI\Project\breakdownReports\" mkdir C:\EI\Project\breakdownReports\
 
@@ -12,7 +12,7 @@ CALL C:\tibco\ems\6.0\samples\java\setup.bat
 
 javac TrainManagementSystem.java
 javac TrainMsgProducer.java
-javac TrainMsgAsyncProducer.java
+javac TrainMsgSyncProducer.java
 
 
 java TrainManagementSystem

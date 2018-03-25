@@ -11,6 +11,7 @@ web/.nb-gradle/
 /web/getDepot/build/
 /web/nearestDepot/nbproject/private/
 /web/nearestDepot/dist/
+/web/nearestDepot/build/
 .DS_Store
 .folder
 

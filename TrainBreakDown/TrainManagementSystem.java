@@ -6,7 +6,7 @@ import java.lang.*;
 public class TrainManagementSystem{
     
     public static String serverUrl;
-    public static TrainMsgAsyncProducer breakdownMsger;
+    public static TrainMsgSyncProducer breakdownMsger;
     public static TrainMsgProducer resumeServiceMsger;
     
     public static void main(String[] args){
@@ -50,7 +50,7 @@ public class TrainManagementSystem{
     
     //Working
     public static boolean initializeMsgProducers(){
-        breakdownMsger = new TrainMsgAsyncProducer(serverUrl,"q.breakdown","q.deployed",TrainMsgProducer.QUEUE);
+        breakdownMsger = new TrainMsgSyncProducer(serverUrl,"q.breakdown","q.deployed",TrainMsgProducer.QUEUE);
         resumeServiceMsger = new TrainMsgProducer(serverUrl,"q.resumed",TrainMsgProducer.QUEUE);
         return true;
     }

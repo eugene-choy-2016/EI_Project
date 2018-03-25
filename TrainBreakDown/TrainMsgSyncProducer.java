@@ -19,7 +19,7 @@ public class TrainMsgSyncProducer {
     private Destination destination;
     private Destination replyDestination;
 
-    public TrainMsgAsyncProducer(String serverUrl, String name, String replyName, int producerType) {
+    public TrainMsgSyncProducer(String serverUrl, String name, String replyName, int producerType) {
         this.serverUrl = serverUrl;
         this.name = name;
         this.replyName = replyName;

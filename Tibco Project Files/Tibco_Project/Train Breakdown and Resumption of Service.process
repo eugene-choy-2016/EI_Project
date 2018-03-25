@@ -13,8 +13,8 @@
     <pd:starter name="Receive Train Breakdown">
         <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
         <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
-        <pd:x>82</pd:x>
-        <pd:y>95</pd:y>
+        <pd:x>44</pd:x>
+        <pd:y>169</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -33,7 +33,7 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>1301</pd:endX>
+    <pd:endX>1320</pd:endX>
     <pd:endY>64</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
@@ -60,8 +60,8 @@
     <pd:activity name="Parse XML">
         <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
         <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
-        <pd:x>82</pd:x>
-        <pd:y>202</pd:y>
+        <pd:x>42</pd:x>
+        <pd:y>45</pd:y>
         <config>
             <inputStyle>text</inputStyle>
             <xsdVersion>default</xsdVersion>
@@ -77,8 +77,8 @@
     <pd:activity name="Render XML">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>206</pd:x>
-        <pd:y>204</pd:y>
+        <pd:x>120</pd:x>
+        <pd:y>43</pd:y>
         <config>
             <renderAsText>text</renderAsText>
             <validateInput>false</validateInput>
@@ -107,8 +107,8 @@
     <pd:activity name="Get nearest Depot">
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>209</pd:x>
-        <pd:y>82</pd:y>
+        <pd:x>233</pd:x>
+        <pd:y>40</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>POST</restMethodUI>
@@ -126,6 +126,8 @@
                                 <xsd:complexType>
                                     <xsd:sequence>
                                         <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="user" type="xsd:string"/>
+                                        <xsd:element name="token" type="xsd:string"/>
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
@@ -216,6 +218,12 @@
                         <param>
                             <xsl:value-of select="$Render-XML/xmlString"/>
                         </param>
+                        <user>
+                            <xsl:value-of select="&quot;is301&quot;"/>
+                        </user>
+                        <token>
+                            <xsl:value-of select="$Parse-JWT-Token/ns:ActivityOutputClass/root/message"/>
+                        </token>
                     </Query>
                 </ns:Parameters>
             </ns:ActivityInput>
@@ -224,8 +232,8 @@
     <pd:activity name="Convert JSON input to XML">
         <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
         <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
-        <pd:x>332</pd:x>
-        <pd:y>91</pd:y>
+        <pd:x>350</pd:x>
+        <pd:y>48</pd:y>
         <config>
             <SchemaType>xsdType</SchemaType>
             <BadgerfishCheck>false</BadgerfishCheck>
@@ -250,7 +258,7 @@
     <pd:activity name="Get Bus Depot Address">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>334</pd:x>
+        <pd:x>353</pd:x>
         <pd:y>202</pd:y>
         <config>
             <timeout>10</timeout>
@@ -283,7 +291,7 @@
     <pd:activity name="Render Bus Request XML">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>446</pd:x>
+        <pd:x>465</pd:x>
         <pd:y>201</pd:y>
         <config>
             <renderAsText>text</renderAsText>
@@ -315,7 +323,7 @@
     <pd:activity name="Send Deploy Request to Bus Depot">
         <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
-        <pd:x>445</pd:x>
+        <pd:x>464</pd:x>
         <pd:y>81</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
@@ -347,7 +355,7 @@
     <pd:activity name="Reply to JMS Message">
         <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
         <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
-        <pd:x>547</pd:x>
+        <pd:x>566</pd:x>
         <pd:y>75</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
@@ -374,7 +382,7 @@
     <pd:activity name="Tweet Train Breakdown">
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
-        <pd:x>665</pd:x>
+        <pd:x>684</pd:x>
         <pd:y>197</pd:y>
         <config>
             <PublishType>Tweet</PublishType>
@@ -391,7 +399,7 @@
     <pd:activity name="Wait for Resumed service message">
         <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
-        <pd:x>670</pd:x>
+        <pd:x>689</pd:x>
         <pd:y>74</pd:y>
         <config>
             <_eventTimeout>60000</_eventTimeout>
@@ -416,7 +424,7 @@
     <pd:activity name="Store Trainbreakdown datetime">
         <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
         <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
-        <pd:x>555</pd:x>
+        <pd:x>574</pd:x>
         <pd:y>198</pd:y>
         <config>
             <variableName>BreakdownDateTime</variableName>
@@ -432,7 +440,7 @@
     <pd:activity name="Tweet Train Resume service">
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
-        <pd:x>898</pd:x>
+        <pd:x>917</pd:x>
         <pd:y>202</pd:y>
         <config>
             <PublishType>Tweet</PublishType>
@@ -449,7 +457,7 @@
     <pd:activity name="Send Undeploy message to Bus Depot">
         <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
         <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
-        <pd:x>777</pd:x>
+        <pd:x>796</pd:x>
         <pd:y>82</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
@@ -482,7 +490,7 @@
     <pd:activity name="Store Train resume service datetime">
         <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
         <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
-        <pd:x>774</pd:x>
+        <pd:x>793</pd:x>
         <pd:y>203</pd:y>
         <config>
             <variableName>ResumeFromBreakdownDateTime</variableName>
@@ -498,7 +506,7 @@
     <pd:activity name="Write information to file">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>1046</pd:x>
+        <pd:x>1065</pd:x>
         <pd:y>177</pd:y>
         <config>
             <encoding>text</encoding>
@@ -508,7 +516,7 @@
         <pd:inputBindings>
             <ns3:WriteActivityInputTextClass>
                 <fileName>
-                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                    <xsl:value-of select="&quot;C:\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
                 </fileName>
                 <textContent>
                     <xsl:value-of select="concat(tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;,$BreakdownDateTime/root/Datetime), &quot;,&quot;, $Parse-XML/breakdown/coordinates/lat,&quot;,&quot;, $Parse-XML/breakdown/coordinates/long,&quot;,&quot;,tib:format-dateTime(&quot;F M y hh:mm:ss a&quot;,$ResumeFromBreakdownDateTime/root/Datetime))"/>
@@ -522,13 +530,13 @@
     <pd:activity name="Create File">
         <pd:type>com.tibco.plugin.file.FileCreateActivity</pd:type>
         <pd:resourceType>ae.activities.FileCreateActivity</pd:resourceType>
-        <pd:x>1042</pd:x>
+        <pd:x>1061</pd:x>
         <pd:y>74</pd:y>
         <config/>
         <pd:inputBindings>
             <ns3:CreateActivityInputClass>
                 <fileName>
-                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                    <xsl:value-of select="&quot;C:\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
                 </fileName>
             </ns3:CreateActivityInputClass>
         </pd:inputBindings>
@@ -536,7 +544,7 @@
     <pd:activity name="Write Headers to file">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>1195</pd:x>
+        <pd:x>1214</pd:x>
         <pd:y>79</pd:y>
         <config>
             <encoding>text</encoding>
@@ -560,7 +568,7 @@
     <pd:activity name="Check file exist">
         <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
         <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
-        <pd:x>894</pd:x>
+        <pd:x>914</pd:x>
         <pd:y>73</pd:y>
         <config>
             <fileName>TrainBreakdownandResumptionofServiceCheckfileexist</fileName>
@@ -623,7 +631,7 @@ else fileExists = false;}
         <pd:inputBindings>
             <javaCodeActivityInput>
                 <fileName>
-                    <xsl:value-of select="&quot;C:\Users\SLJ\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
+                    <xsl:value-of select="&quot;C:\EI_Project\Tibco Project Files\Tibco_Project\Incident.csv&quot;"/>
                 </fileName>
             </javaCodeActivityInput>
         </pd:inputBindings>
@@ -631,7 +639,7 @@ else fileExists = false;}
     <pd:activity name="Send Mail">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>1196</pd:x>
+        <pd:x>1215</pd:x>
         <pd:y>179</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
@@ -681,6 +689,140 @@ else fileExists = false;}
             </ns4:mailActivityInput>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Obtain JWT Token">
+        <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
+        <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
+        <pd:x>123</pd:x>
+        <pd:y>207</pd:y>
+        <config>
+            <enableProtocolUI>None</enableProtocolUI>
+            <restMethodUI>GET</restMethodUI>
+            <restResponseType>JSON</restResponseType>
+            <authChoiceUI>No Authentication</authChoiceUI>
+            <WADLPaths/>
+            <WADLBaseURL/>
+            <restMethodIDUI/>
+            <restURI>http://localhost:8084/nearestDepot/jwt?user=is301</restURI>
+            <restInputReferNode>
+                <xsd:element name="Parameters">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Query" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Header" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Body" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Form" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="Text" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content" type="xsd:string" minOccurs="0"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="Binary" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="type" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content" type="xsd:base64Binary" minOccurs="0"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="Multipart" minOccurs="0" maxOccurs="unbounded">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="content-disposition" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="filename" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content-type" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content-id" type="xsd:string" minOccurs="0"/>
+                                                    <xsd:element name="content" minOccurs="0">
+                                                        <xsd:complexType>
+                                                            <xsd:choice>
+                                                                <xsd:element name="binary" type="xsd:base64Binary"/>
+                                                                <xsd:element name="text" type="xsd:string"/>
+                                                                <xsd:element name="fileName" type="xsd:string"/>
+                                                            </xsd:choice>
+                                                        </xsd:complexType>
+                                                    </xsd:element>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </restInputReferNode>
+            <restOutputReferNode>
+                <xsd:element name="header">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Date" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Range" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Last-Modifie" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </restOutputReferNode>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Parse JWT Token">
+        <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
+        <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
+        <pd:x>236</pd:x>
+        <pd:y>208</pd:y>
+        <config>
+            <SchemaType>xsdType</SchemaType>
+            <BadgerfishCheck>false</BadgerfishCheck>
+            <ActivityOutputEditor>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="message" type="xsd:string"/>
+                            <xsd:element name="status" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </ActivityOutputEditor>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInputClass>
+                <jsonString>
+                    <xsl:value-of select="$Obtain-JWT-Token/ns:RESTOutput/msg"/>
+                </jsonString>
+            </ns:ActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Receive Train Breakdown</pd:from>
         <pd:to>Parse XML</pd:to>
@@ -691,13 +833,6 @@ else fileExists = false;}
     <pd:transition>
         <pd:from>Parse XML</pd:from>
         <pd:to>Render XML</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Render XML</pd:from>
-        <pd:to>Get nearest Depot</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -826,6 +961,27 @@ else fileExists = false;}
     <pd:transition>
         <pd:from>Send Mail</pd:from>
         <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render XML</pd:from>
+        <pd:to>Obtain JWT Token</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Obtain JWT Token</pd:from>
+        <pd:to>Parse JWT Token</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse JWT Token</pd:from>
+        <pd:to>Get nearest Depot</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
