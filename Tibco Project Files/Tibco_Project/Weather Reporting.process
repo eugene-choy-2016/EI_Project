@@ -25,11 +25,11 @@
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1520430210205</pd:targetNamespace>
-    <pd:activity name="Invoke REST API">
+    <pd:activity name="Invoke weather REST API">
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>249</pd:x>
-        <pd:y>53</pd:y>
+        <pd:x>250</pd:x>
+        <pd:y>63</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>GET</restMethodUI>
@@ -132,7 +132,7 @@
         </config>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="JMS Topic Publisher">
+    <pd:activity name="JMS Weather Topic Publisher">
         <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
         <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
         <pd:x>642</pd:x>
@@ -155,7 +155,7 @@
         <pd:inputBindings>
             <ns2:ActivityInput>
                 <Body>
-                    <xsl:value-of select="&quot;Heavy rain alert. Please travel with care&quot;"/>
+                    <xsl:value-of select="&quot;Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;"/>
                 </Body>
             </ns2:ActivityInput>
         </pd:inputBindings>
@@ -164,7 +164,7 @@
         <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
         <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
         <pd:x>422</pd:x>
-        <pd:y>61</pd:y>
+        <pd:y>60</pd:y>
         <config>
             <inputStyle>text</inputStyle>
             <xsdVersion>default</xsdVersion>
@@ -173,11 +173,11 @@
         </config>
         <pd:inputBindings>
             <xmlString>
-                <xsl:value-of select="$Invoke-REST-API/ns:RESTOutput/msg"/>
+                <xsl:value-of select="$Invoke-weather-REST-API/ns:RESTOutput/msg"/>
             </xmlString>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="TwitterPublish Heavy Rain Alert">
+    <pd:activity name="Twitter Publish Heavy Rain Alert">
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
         <pd:x>197</pd:x>
@@ -189,20 +189,20 @@
         <pd:inputBindings>
             <PublishTweetInput>
                 <status>
-                    <xsl:value-of select="concat($Every-Hour-check-Weather/ns1:TimerOutputSchema/Hour, &quot;:&quot; ,$Every-Hour-check-Weather/ns1:TimerOutputSchema/Minute, &quot;:&quot;, $Every-Hour-check-Weather/ns1:TimerOutputSchema/Second, &quot; - Heavy rain alert. Please travel with care.&quot;)"/>
+                    <xsl:value-of select="concat($Every-Hour-check-Weather/ns1:TimerOutputSchema/Hour, &quot;:&quot; ,$Every-Hour-check-Weather/ns1:TimerOutputSchema/Minute, &quot;:&quot;, $Every-Hour-check-Weather/ns1:TimerOutputSchema/Second, &quot; - Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;)"/>
                 </status>
             </PublishTweetInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Every Hour check Weather</pd:from>
-        <pd:to>Invoke REST API</pd:to>
+        <pd:to>Invoke weather REST API</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Invoke REST API</pd:from>
+        <pd:from>Invoke weather REST API</pd:from>
         <pd:to>Parse XML</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -210,7 +210,8 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Parse XML</pd:from>
-        <pd:to>JMS Topic Publisher</pd:to>
+        <pd:to>JMS Weather Topic Publisher</pd:to>
+        <pd:xpathDescription>warning</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
@@ -219,13 +220,14 @@
     <pd:transition>
         <pd:from>Parse XML</pd:from>
         <pd:to>End</pd:to>
+        <pd:xpathDescription>no warning</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
         <pd:xpath>tib:trim($Parse-XML/channel/item/warning)="NIL"</pd:xpath>
     </pd:transition>
     <pd:transition>
-        <pd:from>JMS Topic Publisher</pd:from>
+        <pd:from>JMS Weather Topic Publisher</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -233,14 +235,15 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Parse XML</pd:from>
-        <pd:to>TwitterPublish Heavy Rain Alert</pd:to>
+        <pd:to>Twitter Publish Heavy Rain Alert</pd:to>
+        <pd:xpathDescription>warning</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
         <pd:xpath>tib:trim($Parse-XML/channel/item/warning) !="NIL"</pd:xpath>
     </pd:transition>
     <pd:transition>
-        <pd:from>TwitterPublish Heavy Rain Alert</pd:from>
+        <pd:from>Twitter Publish Heavy Rain Alert</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
