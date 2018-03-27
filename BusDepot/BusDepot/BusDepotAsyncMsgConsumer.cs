@@ -195,7 +195,7 @@ public class BusDepotAsyncMsgConsumer : IExceptionListener, IMessageListener
 				doc.LoadXml(textMsg.Text);
 				string xPathString = "//busRequest/station";
 				XmlNode station = doc.DocumentElement.SelectSingleNode(xPathString);
-				Console.WriteLine(name + ": Buses have been dispatched to {0} station", station.InnerText);
+				Console.WriteLine(name + ": Buses have been dispatched to {0}", station.InnerText);
 			}
 		}
 		catch (Exception e)
