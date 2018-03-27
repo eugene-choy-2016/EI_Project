@@ -5,6 +5,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="train_id" type="xs:int" minOccurs="1" maxOccurs="1" />
+                <xs:element name="line" type="xs:string" minOccurs="1" maxOccurs="1"/>
                 <xs:element name="faultType" type="xs:string" minOccurs="1" maxOccurs="1" />
                 <xs:element name="timestamp" type="xs:dateTime" minOccurs="1" maxOccurs="1" />
                 <xs:element name="coordinates" minOccurs="1" maxOccurs="1">
