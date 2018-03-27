@@ -10,11 +10,11 @@
         <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
         <pd:resourceType>ae.activities.timer</pd:resourceType>
         <pd:x>158</pd:x>
-        <pd:y>64</pd:y>
+        <pd:y>65</pd:y>
         <config>
             <StartTime>1521095444000</StartTime>
             <Frequency>false</Frequency>
-            <TimeInterval>5</TimeInterval>
+            <TimeInterval>10</TimeInterval>
             <FrequencyIndex>Second</FrequencyIndex>
         </config>
         <pd:inputBindings/>
@@ -192,7 +192,7 @@
         <pd:inputBindings>
             <PublishTweetInput>
                 <status>
-                    <xsl:value-of select="concat($Every-Hour-check-Weather/ns1:TimerOutputSchema/Hour, &quot;:&quot; ,$Every-Hour-check-Weather/ns1:TimerOutputSchema/Minute, &quot;:&quot;, $Every-Hour-check-Weather/ns1:TimerOutputSchema/Second, &quot; - Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;)"/>
+                    <xsl:value-of select="concat(tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;,tib:current-dateTime-timezone(8, 0)), &quot; - Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;)"/>
                 </status>
             </PublishTweetInput>
         </pd:inputBindings>
