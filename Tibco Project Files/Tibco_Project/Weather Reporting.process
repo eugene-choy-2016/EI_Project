@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="www.tibco.com/plugin/Timer" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="www.tibco.com/plugin/Timer" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd" schemaLocation="/weather.xsd"/>
     <pd:name>Weather Reporting.process</pd:name>
     <pd:startName>Every Hour check Weather</pd:startName>
@@ -136,7 +136,7 @@
         <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
         <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
         <pd:x>642</pd:x>
-        <pd:y>215</pd:y>
+        <pd:y>216</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -150,10 +150,13 @@
                 <JMSExpiration>0</JMSExpiration>
                 <JMSPriority>4</JMSPriority>
             </ConfigurableHeaders>
-            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
+            <ConnectionReference>/Connection/JMS-Connection-1.sharedjmscon</ConnectionReference>
         </config>
         <pd:inputBindings>
             <ns2:ActivityInput>
+                <destinationTopic>
+                    <xsl:value-of select="&quot;t.weather&quot;"/>
+                </destinationTopic>
                 <Body>
                     <xsl:value-of select="&quot;Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;"/>
                 </Body>

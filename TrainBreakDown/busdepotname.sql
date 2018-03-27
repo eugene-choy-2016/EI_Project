@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS `location` (
 --
 
 INSERT INTO `location` (`ID`, `queue`) VALUES
-('JRNG', 'queue.depot.jurong'),
-('TMPN', 'queue.depot.tampines'),
-('TPYH', 'queue.depot.toapayoh');
+('JRNG', 'q.depot.jurong'),
+('TMPN', 'q.depot.tampines'),
+('TPYH', 'q.depot.toapayoh');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
