@@ -30,6 +30,7 @@ public class TrainListener{
         
         parseArgs(args);
         Scanner sc = new Scanner(System.in);
+        String lineSubscribed = "";
         
         TrainMsgConsumer weatherTopic = new TrainMsgConsumer("localhost","t.weather",TrainMsgConsumer.TOPIC);
         TrainMsgConsumer lineMessages;
@@ -43,18 +44,27 @@ public class TrainListener{
         while (line < 1 || line > 2){
             System.out.println("Please log in to the correct Line: ");
             System.out.println("1. East-West (ew)");
-            System.out.println("1. North-South (ns)");
+            System.out.println("2. North-South (ns)");
             line = sc.nextInt();
         }
         
         if(line == 1){
             lineMessages = new TrainMsgConsumer("localhost","t.ew.listener",TrainMsgConsumer.TOPIC);
+            lineSubscribed = "t.ew.listener";
         }else{
-            lineMessages = new TrainMsgConsumer("localhost","t.ew.listener",TrainMsgConsumer.TOPIC);
+            lineMessages = new TrainMsgConsumer("localhost","t.ns.listener",TrainMsgConsumer.TOPIC);
+            lineSubscribed = "t.ns.listener";
         }
         
         System.out.println();
         System.out.println();
+        
+        System.out.println("Listening for message from t.weather");
+        System.out.println("Listening for message from "+lineSubscribed);
+        
+        System.out.println();
+        
+        
 
     }
     
