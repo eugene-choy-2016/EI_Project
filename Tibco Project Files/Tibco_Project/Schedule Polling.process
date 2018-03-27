@@ -8,8 +8,8 @@
     <pd:starter name="Schedule Poller">
         <pd:type>com.tibco.plugin.file.FileEventSource</pd:type>
         <pd:resourceType>ae.activities.FileEventSourceResource</pd:resourceType>
-        <pd:x>76</pd:x>
-        <pd:y>209</pd:y>
+        <pd:x>112</pd:x>
+        <pd:y>216</pd:y>
         <config>
             <pollInterval>5</pollInterval>
             <createEvent>true</createEvent>
@@ -25,16 +25,16 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>726</pd:endX>
-    <pd:endY>57</pd:endY>
+    <pd:endX>829</pd:endX>
+    <pd:endY>110</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1521286907602</pd:targetNamespace>
     <pd:activity name="Parse JSON">
         <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
         <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
-        <pd:x>730</pd:x>
-        <pd:y>292</pd:y>
+        <pd:x>601</pd:x>
+        <pd:y>216</pd:y>
         <config>
             <SchemaType>xsdType</SchemaType>
             <BadgerfishCheck>false</BadgerfishCheck>
@@ -62,8 +62,8 @@
     <pd:activity name="Send Emails to Depot">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>994</pd:x>
-        <pd:y>163</pd:y>
+        <pd:x>766</pd:x>
+        <pd:y>245</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
@@ -117,10 +117,10 @@
     <pd:group name="Upload Schedule Group">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>200</pd:x>
-        <pd:y>22</pd:y>
-        <pd:width>324</pd:width>
-        <pd:height>359</pd:height>
+        <pd:x>199</pd:x>
+        <pd:y>100</pd:y>
+        <pd:width>347</pd:width>
+        <pd:height>214</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
         <pd:collapsedHeight>70</pd:collapsedHeight>
         <pd:groupVariables/>
@@ -129,7 +129,7 @@
             <pd:groupType>errorLoop</pd:groupType>
             <pd:serializable>false</pd:serializable>
             <pd:indexSlot>i</pd:indexSlot>
-            <pd:errorCondition>$i&gt; 3</pd:errorCondition>
+            <pd:errorCondition>$i&gt; 20</pd:errorCondition>
             <pd:suspendAfterErrorRetry>false</pd:suspendAfterErrorRetry>
         </config>
         <pd:inputBindings/>
@@ -167,8 +167,8 @@
         <pd:activity name="Upload Schedule">
             <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
             <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-            <pd:x>340</pd:x>
-            <pd:y>208</pd:y>
+            <pd:x>375</pd:x>
+            <pd:y>224</pd:y>
             <config>
                 <enableProtocolUI>None</enableProtocolUI>
                 <restMethodUI>POST</restMethodUI>
@@ -295,8 +295,8 @@
         <pd:activity name="Sleep">
             <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
             <pd:resourceType>ae.activities.sleep</pd:resourceType>
-            <pd:x>339</pd:x>
-            <pd:y>95</pd:y>
+            <pd:x>254</pd:x>
+            <pd:y>165</pd:y>
             <config/>
             <pd:inputBindings>
                 <ns3:SleepInputSchema>
@@ -309,8 +309,8 @@
         <pd:activity name="Write to Log-1">
             <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
             <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-            <pd:x>460</pd:x>
-            <pd:y>93</pd:y>
+            <pd:x>432</pd:x>
+            <pd:y>164</pd:y>
             <config>
                 <encoding>text</encoding>
                 <compressFile>None</compressFile>
@@ -335,8 +335,8 @@
     <pd:activity name="Write to Log-2">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>728</pd:x>
-        <pd:y>166</pd:y>
+        <pd:x>714</pd:x>
+        <pd:y>171</pd:y>
         <config>
             <encoding>text</encoding>
             <compressFile>None</compressFile>

@@ -26,7 +26,7 @@
 /// </summary>
 
 using System;
-// using System.Xml;
+using System.Xml;
 using TIBCO.EMS;
 
 public class BusDepotAsyncMsgConsumer : IExceptionListener, IMessageListener 
@@ -184,20 +184,26 @@ public class BusDepotAsyncMsgConsumer : IExceptionListener, IMessageListener
     }
 
     public void OnMessage(Message msg)  {
-        // try 
-        // {
+		try
+		{
 			TextMessage textMsg = (TextMessage)msg;
-            Console.WriteLine("Received message: " + textMsg.Text);
-            Console.WriteLine(name + ": Buses have been dispatched to xxx station");
-			// XmlDocument doc = new XmlDocument();
-			// doc.LoadXml(textMsg.Text);
-        // } 
-        // catch (Exception e) 
-        // {
-            // Console.Error.WriteLine("Unexpected exception message callback!");
-            // Console.Error.WriteLine(e.StackTrace);
-            // Environment.Exit(-1);
-        // }
+			Console.WriteLine("Received message: " + textMsg.Text);
+			if (textMsg.Text.Contains("Stop deploying bus")) {
+				Console.WriteLine(name + ": Buses deployment has been stopped");
+			} else {
+				XmlDocument doc = new XmlDocument();
+				doc.LoadXml(textMsg.Text);
+				string xPathString = "//busRequest/station";
+				XmlNode station = doc.DocumentElement.SelectSingleNode(xPathString);
+				Console.WriteLine(name + ": Buses have been dispatched to {0}", station.InnerText);
+			}
+		}
+		catch (Exception e)
+		{
+			Console.Error.WriteLine("Unexpected exception message callback!");
+			Console.Error.WriteLine(e.StackTrace);
+			Environment.Exit(-1);
+		}
 		
 		try {
             QueueConnectionFactory factory = new TIBCO.EMS.QueueConnectionFactory(serverUrl);

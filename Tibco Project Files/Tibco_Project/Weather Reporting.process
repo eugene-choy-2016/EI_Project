@@ -9,8 +9,8 @@
     <pd:starter name="Every Hour check Weather">
         <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
         <pd:resourceType>ae.activities.timer</pd:resourceType>
-        <pd:x>102</pd:x>
-        <pd:y>67</pd:y>
+        <pd:x>158</pd:x>
+        <pd:y>64</pd:y>
         <config>
             <StartTime>1521095444000</StartTime>
             <Frequency>false</Frequency>
@@ -20,16 +20,16 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>329</pd:endX>
-    <pd:endY>319</pd:endY>
+    <pd:endX>546</pd:endX>
+    <pd:endY>173</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1520430210205</pd:targetNamespace>
     <pd:activity name="Invoke weather REST API">
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-        <pd:x>250</pd:x>
-        <pd:y>63</pd:y>
+        <pd:x>288</pd:x>
+        <pd:y>62</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>GET</restMethodUI>
@@ -135,8 +135,8 @@
     <pd:activity name="JMS Weather Topic Publisher">
         <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
         <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
-        <pd:x>642</pd:x>
-        <pd:y>215</pd:y>
+        <pd:x>543</pd:x>
+        <pd:y>65</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -150,10 +150,13 @@
                 <JMSExpiration>0</JMSExpiration>
                 <JMSPriority>4</JMSPriority>
             </ConfigurableHeaders>
-            <ConnectionReference>/Connection/JMS Connection.sharedjmscon</ConnectionReference>
+            <ConnectionReference>/Connection/JMS-Connection-1.sharedjmscon</ConnectionReference>
         </config>
         <pd:inputBindings>
             <ns2:ActivityInput>
+                <destinationTopic>
+                    <xsl:value-of select="&quot;t.weather&quot;"/>
+                </destinationTopic>
                 <Body>
                     <xsl:value-of select="&quot;Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;"/>
                 </Body>
@@ -163,8 +166,8 @@
     <pd:activity name="Parse XML">
         <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
         <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
-        <pd:x>422</pd:x>
-        <pd:y>60</pd:y>
+        <pd:x>401</pd:x>
+        <pd:y>55</pd:y>
         <config>
             <inputStyle>text</inputStyle>
             <xsdVersion>default</xsdVersion>
@@ -180,8 +183,8 @@
     <pd:activity name="Twitter Publish Heavy Rain Alert">
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
-        <pd:x>197</pd:x>
-        <pd:y>254</pd:y>
+        <pd:x>403</pd:x>
+        <pd:y>183</pd:y>
         <config>
             <PublishType>Tweet</PublishType>
             <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
