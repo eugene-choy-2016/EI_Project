@@ -48,11 +48,19 @@ public class TrainListener{
             line = sc.nextInt();
         }
         
+        System.out.println("Please set server URL (Enter 1 for localhost)");
+        
+        String serverURL = sc.nextLine();
+        
+        if(serverURL.equals("1")){
+            serverURL = "localhost";
+        }
+        
         if(line == 1){
-            lineMessages = new TrainMsgConsumer("localhost","t.ew.listener",TrainMsgConsumer.TOPIC);
+            lineMessages = new TrainMsgConsumer(serverURL,"t.ew.listener",TrainMsgConsumer.TOPIC);
             lineSubscribed = "t.ew.listener";
         }else{
-            lineMessages = new TrainMsgConsumer("localhost","t.ns.listener",TrainMsgConsumer.TOPIC);
+            lineMessages = new TrainMsgConsumer(serverURL,"t.ns.listener",TrainMsgConsumer.TOPIC);
             lineSubscribed = "t.ns.listener";
         }
         
