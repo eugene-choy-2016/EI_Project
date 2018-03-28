@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://xmlns.tibco.com/body" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/busRequest.xsd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://xmlns.tibco.com/body" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown_formatted.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Schemas/new_breakdown.xsd" schemaLocation="/Schemas/new_breakdown.xsd"/>
@@ -33,8 +33,8 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>618</pd:endX>
-    <pd:endY>766</pd:endY>
+    <pd:endX>705</pd:endX>
+    <pd:endY>733</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <BreakdownDateTime>
@@ -441,7 +441,7 @@
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
         <pd:x>626</pd:x>
-        <pd:y>613</pd:y>
+        <pd:y>597</pd:y>
         <config>
             <PublishType>Tweet</PublishType>
             <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
@@ -506,8 +506,8 @@
     <pd:activity name="Write information to file">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>469</pd:x>
-        <pd:y>649</pd:y>
+        <pd:x>472</pd:x>
+        <pd:y>633</pd:y>
         <config>
             <encoding>text</encoding>
             <compressFile>None</compressFile>
@@ -530,8 +530,8 @@
     <pd:activity name="Create File">
         <pd:type>com.tibco.plugin.file.FileCreateActivity</pd:type>
         <pd:resourceType>ae.activities.FileCreateActivity</pd:resourceType>
-        <pd:x>288</pd:x>
-        <pd:y>755</pd:y>
+        <pd:x>234</pd:x>
+        <pd:y>725</pd:y>
         <config>
             <createMissingDirectories>true</createMissingDirectories>
         </config>
@@ -546,8 +546,8 @@
     <pd:activity name="Write Headers to file">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>355</pd:x>
-        <pd:y>672</pd:y>
+        <pd:x>347</pd:x>
+        <pd:y>653</pd:y>
         <config>
             <encoding>text</encoding>
             <compressFile>None</compressFile>
@@ -570,8 +570,8 @@
     <pd:activity name="Check file exist">
         <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
         <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
-        <pd:x>298</pd:x>
-        <pd:y>602</pd:y>
+        <pd:x>296</pd:x>
+        <pd:y>592</pd:y>
         <config>
             <fileName>TrainBreakdownandResumptionofServiceCheckfileexist</fileName>
             <packageName>TrainBreakdownandResumptionofService</packageName>
@@ -641,8 +641,8 @@ else fileExists = false;}
     <pd:activity name="Send Mail">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>616</pd:x>
-        <pd:y>678</pd:y>
+        <pd:x>657</pd:x>
+        <pd:y>660</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
