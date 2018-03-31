@@ -16,6 +16,13 @@ There are a total of 4 activities in the process.
 ### Schedule Poller
 This activity checks the designated folder for new schedule every 5 seconds. To change the designated folder, in the **Configuration** tab of the activity, choose the folder under **File Name:** and pressing the binoculars icon. The selector will force you to select a file, select one in the designated folder and edit the URL to remove the reference to the selected file. Alternatively, you can use a __*__.extension to only check for specific file format files.
 
+### Group
+Upload Schedule, Sleep and Write to Log activities are grouped together in a loop. When the process gets to Upload Schedule, it will attempt to upload the schedule. If it fails to do so, it will attempt to retry for 10 tries at an interval of 10 seconds. Each time it will log the failure in the Log file timestamped. The log file is found (and created) at
+
+` C:\EI\Project\log.txt `
+
+If at any point within the 10 tries, it manage to successful upload, the process will continue. Otherwise, it will end the process instance instantly after the 10th tries. 
+
 ### Upload Schedule
 This activity calls the API to upload the schedule via POST. The URL of the API is configured in the **Configuration** tab in **Resource URL**. The key for the upload file is **schedule** and should (already) be set in **Input** tab's *Activity Input*, expanding the dropdown *Activity Input > Parameter > Body > Multipart > name* typing into the field.
 
@@ -24,16 +31,20 @@ It will return a JSON upon successful upload with *status, statusCode and link* 
 ### Parse JSON
 This activity will parse the JSON returned and extract the link for the next activity usage
 
+### Write to Log-2
+This activity is called if the result of the JSON returns `"status": "error"` where it will be logged into the log file as mentioned above.
+
 ### Send Emails to Depot
-This activity will take the link extracted by the previous activity and send this link to other depots' email automatically.
+Otherwise, this activity will take the link extracted by the previous activity and send this link to other depots' email automatically.
 
 #### Prerequisites
 Due to the archaic nature of the palette, modifications need to be done for this activity to work.
 <https://stackoverflow.com/a/23909223>
 
 1. Add the following 2 lines to designer.tra (*\<Tibco installation folder\>/designer/5.8/bin*) at the bottom of the file:
-<code>java.property.mail.smtp.starttls.enable=true
-java.property.mail.smtp.starttls.required=true</code>
+
+`java.property.mail.smtp.starttls.enable=true` <br/>   `java.property.mail.smtp.starttls.required=true`
+
 2. Restart Tibco Designer
 3. If you are using other email provider aside from Gmail, you will be required to download the entire SMTP server's certificate chain of your email provider including the root CA. Placed them in the *certs* folder at the root of this Project folder.
 4. If you are using Gmail as the sender, you will need to *allow* less secure apps from here: [Enable less secure app access](https://myaccount.google.com/lesssecureapps)

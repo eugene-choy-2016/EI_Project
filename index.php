@@ -14,7 +14,7 @@
         }
 
         #subhero-1 {
-            background: url("web/hero.jpg"), #000;
+            background: url("hero.jpg"), #000;
             background-position: 20% 100%;
             background-size: 120%;
         }
