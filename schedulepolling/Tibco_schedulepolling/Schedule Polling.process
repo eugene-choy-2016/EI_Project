@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://schemas.tibco.com/bw/pe/plugin/5.0/exceptions" xmlns:ns3="www.tibco.com/plugin/Sleep" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns5="http://schemas.tibco.com/bw/plugins/xml/5.0/RESTJSONExceptions" xmlns:pfx="http://xmlns.tibco.com/body">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://schemas.tibco.com/bw/pe/plugin/5.0/exceptions" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="www.tibco.com/plugin/Sleep" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns5="http://schemas.tibco.com/bw/plugins/xml/5.0/RESTJSONExceptions" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="http://xmlns.tibco.com/body">
     <pd:name>Schedule Polling.process</pd:name>
     <pd:startName>Schedule Poller</pd:startName>
     <pd:startX>0</pd:startX>
@@ -8,8 +8,8 @@
     <pd:starter name="Schedule Poller">
         <pd:type>com.tibco.plugin.file.FileEventSource</pd:type>
         <pd:resourceType>ae.activities.FileEventSourceResource</pd:resourceType>
-        <pd:x>76</pd:x>
-        <pd:y>209</pd:y>
+        <pd:x>102</pd:x>
+        <pd:y>223</pd:y>
         <config>
             <pollInterval>5</pollInterval>
             <createEvent>true</createEvent>
@@ -25,16 +25,16 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>726</pd:endX>
-    <pd:endY>57</pd:endY>
+    <pd:endX>613</pd:endX>
+    <pd:endY>67</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1521286907602</pd:targetNamespace>
     <pd:activity name="Parse JSON">
         <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
         <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
-        <pd:x>730</pd:x>
-        <pd:y>292</pd:y>
+        <pd:x>614</pd:x>
+        <pd:y>298</pd:y>
         <config>
             <SchemaType>xsdType</SchemaType>
             <BadgerfishCheck>false</BadgerfishCheck>
@@ -62,8 +62,8 @@
     <pd:activity name="Send Emails to Depot">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>994</pd:x>
-        <pd:y>161</pd:y>
+        <pd:x>735</pd:x>
+        <pd:y>75</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
@@ -117,10 +117,10 @@
     <pd:group name="Upload Schedule Group">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>200</pd:x>
-        <pd:y>22</pd:y>
-        <pd:width>324</pd:width>
-        <pd:height>359</pd:height>
+        <pd:x>203</pd:x>
+        <pd:y>100</pd:y>
+        <pd:width>318</pd:width>
+        <pd:height>228</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
         <pd:collapsedHeight>70</pd:collapsedHeight>
         <pd:groupVariables/>
@@ -129,7 +129,7 @@
             <pd:groupType>errorLoop</pd:groupType>
             <pd:serializable>false</pd:serializable>
             <pd:indexSlot>i</pd:indexSlot>
-            <pd:errorCondition>$i&gt; 3</pd:errorCondition>
+            <pd:errorCondition>$i&gt; 10</pd:errorCondition>
             <pd:suspendAfterErrorRetry>false</pd:suspendAfterErrorRetry>
         </config>
         <pd:inputBindings/>
@@ -167,8 +167,8 @@
         <pd:activity name="Upload Schedule">
             <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
             <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
-            <pd:x>340</pd:x>
-            <pd:y>208</pd:y>
+            <pd:x>357</pd:x>
+            <pd:y>225</pd:y>
             <config>
                 <enableProtocolUI>None</enableProtocolUI>
                 <restMethodUI>POST</restMethodUI>
@@ -295,13 +295,13 @@
         <pd:activity name="Sleep">
             <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
             <pd:resourceType>ae.activities.sleep</pd:resourceType>
-            <pd:x>339</pd:x>
-            <pd:y>95</pd:y>
+            <pd:x>257</pd:x>
+            <pd:y>165</pd:y>
             <config/>
             <pd:inputBindings>
                 <ns3:SleepInputSchema>
                     <IntervalInMillisec>
-                        <xsl:value-of select="5000"/>
+                        <xsl:value-of select="10000"/>
                     </IntervalInMillisec>
                 </ns3:SleepInputSchema>
             </pd:inputBindings>
@@ -309,8 +309,8 @@
         <pd:activity name="Write to Log-1">
             <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
             <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-            <pd:x>460</pd:x>
-            <pd:y>93</pd:y>
+            <pd:x>434</pd:x>
+            <pd:y>163</pd:y>
             <config>
                 <encoding>text</encoding>
                 <compressFile>None</compressFile>
@@ -335,8 +335,8 @@
     <pd:activity name="Write to Log-2">
         <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
         <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
-        <pd:x>728</pd:x>
-        <pd:y>166</pd:y>
+        <pd:x>614</pd:x>
+        <pd:y>174</pd:y>
         <config>
             <encoding>text</encoding>
             <compressFile>None</compressFile>

@@ -1,4 +1,6 @@
 # Schedule Poller
+![Schedule Polling Process](../Documentations/processes%20Image/Schedule%20Polling.png)
+
 This process will scan a determined folder, when there is a new Schedule (in .txt) is added to the folder it will upload the schedule to a Web Storage by calling an API. The API will return a JSON containing the link to the schedule which will be sent to all depots' email.
 
 ## API
