@@ -26,7 +26,7 @@ The file structure in this directory is as follow:
 | [Weather Reporting](/WeatherReporting) |  Files used for Weather Reporting process |
 | [Web Service](/Web%20Service) | Locally-hosted coded web service for nearest bus depot (Train Breakdown process) |
 
-There are various **Readme.md** in the various file structure to help user better understand how the files are supposed to be interacted by the user
+There are various **Readme.md** in the various folders to help user better understand how the files are supposed to be interacted by the user
 
 ## Train Breakdown and Resumption of Service
 This process simulates integration across Bus Depot, Train Management System, Train Listeners, Email and Twitter using the Train Breakdown and Resumption of Service Process created with Tibco BW.
