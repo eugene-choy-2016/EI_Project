@@ -37,7 +37,7 @@ This activity will parse the JSON returned and extract the link for the next act
 This activity is called if the result of the JSON returns `"status": "error"` where it will be logged into the log file as mentioned above.
 
 ### Send Emails to Depot
-Otherwise, this activity will take the link extracted by the previous activity and send this link to other depots' email automatically.
+Otherwise, this activity will take the link extracted by the previous activity and send this link to other depots' email automatically. It will also send the schedule as an attachments as a backup incase the schedule hoster is down. The necessary (and minimum) components for attachments are described in the MIME element of Input tab of the activity.
 
 #### Prerequisites
 Due to the archaic nature of the palette, modifications need to be done for this activity to work.

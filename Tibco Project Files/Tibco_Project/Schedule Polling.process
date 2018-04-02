@@ -62,8 +62,8 @@
     <pd:activity name="Send Emails to Depot">
         <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
         <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
-        <pd:x>735</pd:x>
-        <pd:y>75</pd:y>
+        <pd:x>734</pd:x>
+        <pd:y>76</pd:y>
         <config>
             <newMimeSupport>true</newMimeSupport>
             <inputOutputVersion>5.2.0</inputOutputVersion>
@@ -108,9 +108,24 @@
                 </xsl:if>
                 <pfx:bodyElement>
                     <bodyText>
-                        <xsl:value-of select="concat(&quot;A new schedule is available. Download here: &quot;, $Parse-JSON/ns1:ActivityOutputClass/root/link)"/>
+                        <xsl:value-of select="concat(&quot;Hi, &#xA; &#xA; A new schedule is available, you can download here: &quot;, $Parse-JSON/ns1:ActivityOutputClass/root/link, &quot;. The schedule is also attached as an attachment in the event the schedule host is not available. You are advised to use the link for the latest updated schedule. &#xA; &#xA; This is a system generated message. No replies will be needed or read.&quot;)"/>
                     </bodyText>
                 </pfx:bodyElement>
+                <ns6:mimeEnvelopeElement>
+                    <mimePart>
+                        <mimeHeaders>
+                            <content-disposition>
+                                <xsl:value-of select="concat(&quot;*;filename=&quot;, $Schedule-Poller/ns:EventSourceOuputTextClass/fileInfo/fileName)"/>
+                            </content-disposition>
+                            <content-type>
+                                <xsl:value-of select="&quot;text/*&quot;"/>
+                            </content-type>
+                        </mimeHeaders>
+                        <fileName>
+                            <xsl:value-of select="$Schedule-Poller/ns:EventSourceOuputTextClass/fileInfo/fullName"/>
+                        </fileName>
+                    </mimePart>
+                </ns6:mimeEnvelopeElement>
             </ns2:mailActivityInput>
         </pd:inputBindings>
     </pd:activity>
