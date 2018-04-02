@@ -56,3 +56,7 @@ A standard "SYSTEM RESUMED" message will be sent to q.resumed to indicate that a
 The train Listener will first prompt the user to log in to either to East-West or North-South line. Once the choice has been
 made the train listener will be listening to 2 topics, mainly the t.weather and the respective lines listener t.<dynamic>.listeners
 
+### Project used
+For this project these accounts will be used
+Twitter: @eieismrt
+Emails: eieismrt@gmail.com, ei.smrt.coo@gmail.com, ei.smrt.logs@gmail.com
