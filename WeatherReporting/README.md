@@ -1,5 +1,5 @@
 # Weather Rest API
-This API wrapper will invoke a HTTP Request to the original NEA's heavy rain warning API at "http://api.nea.gov.sg/api/WebAPI/?dataset=heavy_rain_warning&keyref=<REPLACE-NEA-KEY-HERE>"
+This API wrapper will invoke a HTTP Request to the original NEA's heavy rain warning API at "http://api.nea.gov.sg/api/WebAPI/?dataset=heavy_rain_warning&keyref='<REPLACE-NEA-KEY-HERE>'"
 In the event that there's no heavy rain warning, this wrapper will have a 50% chance of returning 'TRUE' aka 'heavy rain warning'.
 
 ### Prerequisites
@@ -36,4 +36,4 @@ In the event that there's no heavy rain warning, this wrapper will have a 50% ch
 ```
 ## Deployment
 This Python wrapper has been deployed to Heroku Cloud.
-Accessible via "https://ei-weather-api.herokuapp.com/key/<REPLACE-NEA-KEY-HERE>"
+Accessible via "https://ei-weather-api.herokuapp.com/key/'<REPLACE-NEA-KEY-HERE>'"
