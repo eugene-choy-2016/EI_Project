@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="www.tibco.com/plugin/Timer" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="www.tibco.com/plugin/Timer" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd" schemaLocation="/weather.xsd"/>
     <pd:name>Weather Reporting.process</pd:name>
     <pd:startName>Every Hour check Weather</pd:startName>
@@ -184,7 +184,7 @@
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
         <pd:x>403</pd:x>
-        <pd:y>183</pd:y>
+        <pd:y>184</pd:y>
         <config>
             <PublishType>Tweet</PublishType>
             <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
@@ -192,7 +192,7 @@
         <pd:inputBindings>
             <PublishTweetInput>
                 <status>
-                    <xsl:value-of select="concat(tib:format-dateTime(&quot;F MMM y hh:mm:ss a&quot;,tib:current-dateTime-timezone(8, 0)), &quot; - Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;)"/>
+                    <xsl:value-of select="concat(tib:format-dateTime(&quot;dd MMM y hh:mm:ss a&quot;,tib:current-dateTime-timezone(8, 0)), &quot; - Heavy Rain Alert. Please travel with care. Trains will be moving at a slower speed.&quot;)"/>
                 </status>
             </PublishTweetInput>
         </pd:inputBindings>
