@@ -12,6 +12,7 @@ The project simulates the integration processes of the Public Transport System i
 1. Train Breakdown and Resumption of Service
 2. Weather Reporting
 3. Schedule Polling
+4. Nearest Bus Depot Finder 
 
 ## File Structure
 The file structure in this directory is as follow:
@@ -42,5 +43,4 @@ This process invokes a REST call to the NEA API every few seconds (pre-set by us
 
 ## Schedule Polling
 This process will be triggered once there is a change to the folder C:/EI/Project/schedules and when there is an addition of a txt file (which simulates the schedule for Bus Depots). The file will be uploaded to a webservice and a URL will be generated and email to all the bus depots for them to download the schedule. More detailed instructions can be found in the schedule polling's folder README
-
 
