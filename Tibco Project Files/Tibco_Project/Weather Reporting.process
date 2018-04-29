@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="www.tibco.com/plugin/Timer" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="www.tibco.com/plugin/Timer" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/weather.xsd" schemaLocation="/weather.xsd"/>
     <pd:name>Weather Reporting.process</pd:name>
     <pd:startName>Every Hour check Weather</pd:startName>
@@ -20,8 +20,8 @@
         <pd:inputBindings/>
     </pd:starter>
     <pd:endName>End</pd:endName>
-    <pd:endX>546</pd:endX>
-    <pd:endY>173</pd:endY>
+    <pd:endX>549</pd:endX>
+    <pd:endY>206</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1520430210205</pd:targetNamespace>
@@ -29,7 +29,7 @@
         <pd:type>com.tibco.plugin.json.activities.RestActivity</pd:type>
         <pd:resourceType>ae.activities.RestActivity</pd:resourceType>
         <pd:x>288</pd:x>
-        <pd:y>62</pd:y>
+        <pd:y>66</pd:y>
         <config>
             <enableProtocolUI>None</enableProtocolUI>
             <restMethodUI>GET</restMethodUI>
@@ -135,8 +135,8 @@
     <pd:activity name="JMS Weather Topic Publisher">
         <pd:type>com.tibco.plugin.jms.JMSTopicPublishActivity</pd:type>
         <pd:resourceType>ae.activities.JMSTopicPublishActivity</pd:resourceType>
-        <pd:x>543</pd:x>
-        <pd:y>65</pd:y>
+        <pd:x>547</pd:x>
+        <pd:y>67</pd:y>
         <config>
             <PermittedMessageType>Text</PermittedMessageType>
             <SessionAttributes>
@@ -166,8 +166,8 @@
     <pd:activity name="Parse XML">
         <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
         <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
-        <pd:x>401</pd:x>
-        <pd:y>55</pd:y>
+        <pd:x>406</pd:x>
+        <pd:y>58</pd:y>
         <config>
             <inputStyle>text</inputStyle>
             <xsdVersion>default</xsdVersion>
@@ -183,8 +183,8 @@
     <pd:activity name="Twitter Publish Heavy Rain Alert">
         <pd:type>com.tibco.plugin.twitter.activities.TwitterPublishActivity</pd:type>
         <pd:resourceType>twitter.activity.TwitterPublishActivity</pd:resourceType>
-        <pd:x>403</pd:x>
-        <pd:y>184</pd:y>
+        <pd:x>408</pd:x>
+        <pd:y>215</pd:y>
         <config>
             <PublishType>Tweet</PublishType>
             <OAuthResource>/Twitter OAUth 1.0 Resource.sharedtwitterresource</OAuthResource>
